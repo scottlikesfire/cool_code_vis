@@ -1,0 +1,69 @@
+{
+    "iterations": 0,
+    "directory_structure_visualizer": {
+        "enabled": false,
+        "target_path": ".",
+        "duration": 0,
+        "expand_interval": 0.005,
+        "reverse": true
+    },
+    "grapher": {
+        "enabled": false,
+        "duration": 5,
+        "step_delay": 0.005
+    },
+    "plasma": {
+        "enabled": false,
+        "duration": 5,
+        "loading_duration": 3
+    },
+    "letter_frequency": {
+        "enabled": false,
+        "text_file": "data/text/words.txt",
+        "word_delay": 0.0005,
+        "num_words": 200000,
+        "duration": 30,
+        "completion_pause": 2
+    },
+    "metaprogramming_imports": {
+        "enabled": false,
+        "file_delay": 0.3,
+        "duration": 20,
+        "completion_pause": 5
+    },
+    "matrix_rain": {
+        "enabled": false,
+        "duration": 10,
+        "speed": 20,
+        "density": 0.05,
+        "loading_duration": 3
+    },
+    "progress_bars": {
+        "enabled": false,
+        "num_bars": 12,
+        "duration": 10,
+        "completion_pause": 3
+    },
+    "rss_feed_reader": {
+        "enabled": true,
+        "feeds": [
+            "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
+            "https://feeds.bbci.co.uk/news/rss.xml",
+            "https://feeds.a.dj.com/rss/RSSWorldNews.xml",
+            "https://www.huffpost.com/section/world-news/feed",
+            "http://feeds.washingtonpost.com/rss/world",
+            "https://www.cnbc.com/id/100727362/device/rss/rss.html"
+        ],
+        "entry_delay": 0.1,
+        "duration": 20,
+        "completion_pause": 2
+    },
+    "unredact": {
+        "enabled": false,
+        "text_file": "data/text/moby_dick.txt",
+        "duration": 15,
+        "num_paragraphs": 6,
+        "redact_probability": 0.3,
+        "completion_pause": 3
+    }
+}

@@ -1,0 +1,3 @@
+[submodule "submodules/scottlib"]
+	path = submodules/scottlib
+	url = git@github.com:scottlikesfire/scottlib.git
