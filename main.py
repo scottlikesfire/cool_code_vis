@@ -9,6 +9,7 @@ from modules.letter_frequency import main as letter_frequency
 from modules.metaprogramming_imports import main as metaprogramming_imports
 from modules.matrix_rain import main as matrix_rain
 from modules.plasma import main as plasma
+from modules.rainbow_code import main as rainbow_code
 from modules.progress_bars import main as progress_bars
 from modules.rss_feed_reader import main as rss_feed_reader
 from modules.unredact import main as unredact
@@ -21,6 +22,7 @@ MODULES = {
     "metaprogramming_imports": metaprogramming_imports,
     "plasma": plasma,
     "progress_bars": progress_bars,
+    "rainbow_code": rainbow_code,
     "rss_feed_reader": rss_feed_reader,
     "unredact": unredact,
 }

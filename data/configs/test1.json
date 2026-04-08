@@ -1,24 +1,24 @@
 {
     "iterations": 0,
     "directory_structure_visualizer": {
-        "enabled": false,
+        "enabled": true,
         "target_path": ".",
         "duration": 0,
         "expand_interval": 0.005,
         "reverse": true
     },
     "grapher": {
-        "enabled": false,
+        "enabled": true,
         "duration": 5,
         "step_delay": 0.005
     },
     "plasma": {
-        "enabled": false,
+        "enabled": true,
         "duration": 5,
         "loading_duration": 3
     },
     "letter_frequency": {
-        "enabled": false,
+        "enabled": true,
         "text_file": "data/text/words.txt",
         "word_delay": 0.0005,
         "num_words": 200000,
@@ -26,20 +26,20 @@
         "completion_pause": 2
     },
     "metaprogramming_imports": {
-        "enabled": false,
+        "enabled": true,
         "file_delay": 0.3,
         "duration": 20,
         "completion_pause": 5
     },
     "matrix_rain": {
-        "enabled": false,
+        "enabled": true,
         "duration": 10,
         "speed": 20,
         "density": 0.05,
         "loading_duration": 3
     },
     "progress_bars": {
-        "enabled": false,
+        "enabled": true,
         "num_bars": 12,
         "duration": 10,
         "completion_pause": 3
@@ -58,11 +58,16 @@
         "duration": 20,
         "completion_pause": 2
     },
+    "rainbow_code": {
+        "enabled": true,
+        "duration": 8,
+        "cycle_length": 800
+    },
     "unredact": {
-        "enabled": false,
+        "enabled": true,
         "text_file": "data/text/moby_dick.txt",
         "duration": 15,
-        "num_paragraphs": 6,
+        "num_paragraphs": 12,
         "redact_probability": 0.3,
         "completion_pause": 3
     }
