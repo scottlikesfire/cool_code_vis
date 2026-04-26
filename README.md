@@ -205,6 +205,9 @@ These reach into the repo itself for content.
   honor `q`/`ESC`.
 
 ---
+# NOTEON DATA
+I have not include most of the data I am using here, this is because I do not know what I have the rights to etc. The meshes should generate, and eventually i will put together a full set of data that is public domain/appropriately licensed etc. 
+---
 
 ## Configs
 
@@ -241,7 +244,6 @@ rendering:
 | `uv_sphere` (6×8) | 50 | 56 |
 | `torus` (12×6) | 72 | 72 |
 | `trefoil_knot` (32×4) | 128 | 128 |
-| `n64` | 48 | 24 |
 
 Regenerate the procedural meshes (everything except `cube` and `n64`) with:
 
