@@ -29,7 +29,7 @@ def main():
 
     # Platonic solids
     gen("tetrahedron", *meshes.generate_tetrahedron())
-    # Cube already exists in data/meshes/cube.obj — leave it alone.
+    gen("cube", *meshes.generate_cube())
     gen("octahedron", *meshes.generate_octahedron())
     gen("icosahedron", *meshes.generate_icosahedron())
     gen("dodecahedron", *meshes.generate_dodecahedron())

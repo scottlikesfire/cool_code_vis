@@ -12,6 +12,35 @@ randomly cycle through.
 
 ---
 
+## First-time setup
+
+```bash
+# 1. Clone with the scottlib submodule (or pull it after cloning)
+git clone --recurse-submodules <repo-url> cool_code_vis
+# already cloned without --recurse-submodules?
+git submodule update --init --recursive
+
+# 2. Install the Python dependencies (numpy, asciimatics, asciichartpy,
+#    feedparser, scipy). Pick whichever flow matches your setup:
+
+# pip / venv:
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+
+# conda:
+conda create -n cool_code python=3.11
+conda activate cool_code
+pip install -r requirements.txt
+
+# 3. Generate the procedural mesh library. Everything in data/meshes/
+#    except n64.obj is produced by this script.
+python generate_meshes.py
+```
+
+After that, you're ready to run.
+
+---
+
 ## Quick start
 
 ```bash
@@ -205,7 +234,7 @@ These reach into the repo itself for content.
   honor `q`/`ESC`.
 
 ---
-# NOTEON DATA
+# NOTE ON DATA
 I have not include most of the data I am using here, this is because I do not know what I have the rights to etc. The meshes should generate, and eventually i will put together a full set of data that is public domain/appropriately licensed etc. 
 ---
 

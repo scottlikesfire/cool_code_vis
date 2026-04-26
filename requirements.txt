@@ -1,0 +1,8 @@
+# Runtime deps used by the visualizers in modules/
+numpy
+asciichartpy        # grapher
+asciimatics         # plasma
+feedparser          # rss_feed_reader
+
+# Pulled in transitively by scottlib (used by generate_meshes.py and the 3D visualizers)
+scipy
