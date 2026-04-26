@@ -5,6 +5,8 @@ import time
 
 import asciichartpy as acp
 
+from modules._quit_helper import StdinPoller
+
 
 def make_random_walk(length=120):
     arr = [round(random.random() * 15)]
@@ -55,23 +57,30 @@ def main(duration=0, step_delay=0.05):
     x_padding = max(0, (term_width - len(x_label)) // 2)
 
     # Animate one series at a time, layering on top of each other
-    for series_idx in range(len(arrays)):
-        series_config = {"colors": config["colors"][:series_idx + 1]}
-        for i in range(1, length + 1):
-            # Completed series shown in full, current series grows
-            plot_data = [arr[:length] for arr in arrays[:series_idx]]
-            plot_data.append(arrays[series_idx][:i])
-            chart = acp.plot(plot_data, series_config)
-            chart = add_y_label(chart)
-            legend = build_legend(series_idx + 1)
-            sys.stdout.write("\033[2J\033[H")
-            sys.stdout.write(chart + "\n" + " " * x_padding + x_label + "\n\n  " + legend + "\n")
-            sys.stdout.flush()
-            time.sleep(step_delay)
+    with StdinPoller() as poller:
+        for series_idx in range(len(arrays)):
+            series_config = {"colors": config["colors"][:series_idx + 1]}
+            for i in range(1, length + 1):
+                if poller.should_quit():
+                    return
+                plot_data = [arr[:length] for arr in arrays[:series_idx]]
+                plot_data.append(arrays[series_idx][:i])
+                chart = acp.plot(plot_data, series_config)
+                chart = add_y_label(chart)
+                legend = build_legend(series_idx + 1)
+                sys.stdout.write("\033[2J\033[H")
+                sys.stdout.write(chart + "\n" + " " * x_padding + x_label
+                                 + "\n\n  " + legend + "\n")
+                sys.stdout.flush()
+                time.sleep(step_delay)
 
-    # Hold the final chart for duration seconds
-    if duration:
-        time.sleep(float(duration))
+        # Hold the final chart for duration seconds, but stay interruptible
+        if duration:
+            hold_end = time.monotonic() + float(duration)
+            while time.monotonic() < hold_end:
+                if poller.should_quit():
+                    return
+                time.sleep(0.05)
 
 
 if __name__ == "__main__":

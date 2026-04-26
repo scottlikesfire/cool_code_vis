@@ -3,11 +3,14 @@ import shutil
 import sys
 import time
 from random import choice
+from asciimatics.event import KeyboardEvent
 from asciimatics.renderers import Plasma, Rainbow, FigletText
 from asciimatics.scene import Scene
 from asciimatics.screen import Screen
 from asciimatics.effects import Print
-from asciimatics.exceptions import ResizeScreenError
+from asciimatics.exceptions import ResizeScreenError, StopApplication
+
+from modules._quit_helper import StdinPoller
 
 
 
@@ -65,40 +68,55 @@ def show_loading(loading_duration):
     interval = loading_duration / steps
 
     sys.stdout.write("\033[2J\033[H")
-    for i in range(steps + 1):
-        pct = i / steps
-        filled = int(bar_width * pct)
-        bar = "█" * filled + "░" * (bar_width - filled)
-        pct_text = f"{int(pct * 100)}%"
+    with StdinPoller() as poller:
+        for i in range(steps + 1):
+            if poller.should_quit():
+                sys.stdout.write("\033[2J\033[H")
+                sys.stdout.flush()
+                return True
+            pct = i / steps
+            filled = int(bar_width * pct)
+            bar = "█" * filled + "░" * (bar_width - filled)
+            pct_text = f"{int(pct * 100)}%"
 
-        title_x = max(0, (term_width - len(title)) // 2)
-        bar_str = f"[{bar}] {pct_text}"
-        bar_x = max(0, (term_width - len(bar_str)) // 2)
-        y = term_height // 2
+            title_x = max(0, (term_width - len(title)) // 2)
+            bar_str = f"[{bar}] {pct_text}"
+            bar_x = max(0, (term_width - len(bar_str)) // 2)
+            y = term_height // 2
 
-        sys.stdout.write(f"\033[{y};{title_x + 1}H{title}")
-        sys.stdout.write(f"\033[{y + 2};{bar_x + 1}H{bar_str}")
-        sys.stdout.flush()
-        time.sleep(interval)
+            sys.stdout.write(f"\033[{y};{title_x + 1}H{title}")
+            sys.stdout.write(f"\033[{y + 2};{bar_x + 1}H{bar_str}")
+            sys.stdout.flush()
+            time.sleep(interval)
 
     sys.stdout.write("\033[2J\033[H")
     sys.stdout.flush()
+    return False
+
+
+def _quit_on_q(event):
+    if isinstance(event, KeyboardEvent):
+        if event.key_code in (ord("q"), ord("Q"), Screen.KEY_ESCAPE):
+            raise StopApplication("user quit")
 
 
 def plasma_render(screen, duration):
     fps = 20
     num_frames = int(duration * fps) if duration else 500
-    screen.play([PlasmaScene(screen, num_frames)], stop_on_resize=True, repeat=False)
+    screen.play([PlasmaScene(screen, num_frames)],
+                stop_on_resize=True, repeat=False,
+                unhandled_input=_quit_on_q)
 
 
 def main(duration=None, loading_duration=3):
     if duration is not None:
         duration = float(duration)
     loading_duration = float(loading_duration)
-    show_loading(loading_duration)
+    if show_loading(loading_duration):
+        return
     try:
         Screen.wrapper(plasma_render, arguments=[duration])
-    except ResizeScreenError:
+    except (ResizeScreenError, StopApplication):
         pass
 
 

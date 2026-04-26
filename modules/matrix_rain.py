@@ -4,6 +4,8 @@ import shutil
 import sys
 import time
 
+from modules._quit_helper import StdinPoller
+
 
 COLOR_GREEN_BRIGHT = 1
 COLOR_GREEN_DIM = 2
@@ -31,24 +33,30 @@ def show_loading(loading_duration):
     interval = loading_duration / steps
 
     sys.stdout.write("\033[2J\033[H")
-    for i in range(steps + 1):
-        pct = i / steps
-        filled = int(bar_width * pct)
-        bar = "#" * filled + "-" * (bar_width - filled)
-        pct_text = f"{int(pct * 100)}%"
+    with StdinPoller() as poller:
+        for i in range(steps + 1):
+            if poller.should_quit():
+                sys.stdout.write("\033[2J\033[H")
+                sys.stdout.flush()
+                return True
+            pct = i / steps
+            filled = int(bar_width * pct)
+            bar = "#" * filled + "-" * (bar_width - filled)
+            pct_text = f"{int(pct * 100)}%"
 
-        title_x = max(0, (term_width - len(title)) // 2)
-        bar_str = f"[{bar}] {pct_text}"
-        bar_x = max(0, (term_width - len(bar_str)) // 2)
-        y = term_height // 2
+            title_x = max(0, (term_width - len(title)) // 2)
+            bar_str = f"[{bar}] {pct_text}"
+            bar_x = max(0, (term_width - len(bar_str)) // 2)
+            y = term_height // 2
 
-        sys.stdout.write(f"\033[{y};{title_x + 1}H\033[32;1m{title}\033[0m")
-        sys.stdout.write(f"\033[{y + 2};{bar_x + 1}H\033[32m{bar_str}\033[0m")
-        sys.stdout.flush()
-        time.sleep(interval)
+            sys.stdout.write(f"\033[{y};{title_x + 1}H\033[32;1m{title}\033[0m")
+            sys.stdout.write(f"\033[{y + 2};{bar_x + 1}H\033[32m{bar_str}\033[0m")
+            sys.stdout.flush()
+            time.sleep(interval)
 
     sys.stdout.write("\033[2J\033[H")
     sys.stdout.flush()
+    return False
 
 
 def seed_initial_drops(columns, max_x, max_y, density):
@@ -171,7 +179,8 @@ def main(duration=10, speed=20, density=0.05, loading_duration=3):
     density = float(density)
     loading_duration = float(loading_duration)
     if loading_duration > 0:
-        show_loading(loading_duration)
+        if show_loading(loading_duration):
+            return
     curses.wrapper(lambda stdscr: run(stdscr, duration, speed, density))
 
 

@@ -1,0 +1,76 @@
+{
+    "iterations": 0,
+    "prime_sieve": {
+        "enabled": false,
+        "n": 5000,
+        "step_delay": 0.0005,
+        "completion_pause": 3
+    },
+    "sorting_visualizer": {
+        "enabled": false,
+        "algorithm": "random",
+        "n": 60,
+        "step_delay": 0.005,
+        "completion_pause": 2
+    },
+    "cellular_automaton": {
+        "enabled": false,
+        "density": 0.3,
+        "step_delay": 0.1,
+        "duration": 20,
+        "completion_pause": 2
+    },
+    "mandelbrot": {
+        "enabled": true,
+        "duration": 20,
+        "zoom_factor": 1.05,
+        "base_iter": 80,
+        "frame_delay": 0.005
+    },
+    "julia_set": {
+        "enabled": true,
+        "duration": 20,
+        "max_iter": 80,
+        "frame_delay": 0.05,
+        "morph_radius": 0.05,
+        "morph_speed": 0.3
+    },
+    "maze_generator": {
+        "enabled": false,
+        "step_delay": 0.001,
+        "completion_pause": 3
+    },
+    "pathfinding": {
+        "enabled": false,
+        "step_delay": 0.001,
+        "completion_pause": 3
+    },
+    "n_queens": {
+        "enabled": true,
+        "n": 8,
+        "step_delay": 0.005,
+        "completion_pause": 3,
+        "target_size": 150
+    },
+    "knights_tour": {
+        "enabled": true,
+        "n": 8,
+        "step_delay": 0.15,
+        "completion_pause": 3,
+        "target_size": 150
+    },
+    "sudoku": {
+        "enabled": true,
+        "duration": 15,
+        "completion_pause": 3,
+        "target_size": 150,
+        "log_lines": 8
+    },
+    "tower_of_hanoi": {
+        "enabled": true,
+        "num_disks": 8,
+        "step_delay": 0.15,
+        "completion_pause": 3,
+        "history_lines": 60
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "iterations": 0,
+    "bouncing_mesh": {
+        "enabled": true,
+        "mesh_file": "data/meshes/",
+        "duration": 25,
+        "frame_delay": 0.04,
+        "mesh_scale": 1.0,
+        "box_x": 10.0,
+        "box_y": 8,
+        "box_z_min": 3.5,
+        "box_z_max": 20,
+        "linear_speed": 4.5,
+        "angular_speed": 2.5,
+        "focal_factor": -0.5,
+        "bounce_jitter": 0.3
+    }
+}

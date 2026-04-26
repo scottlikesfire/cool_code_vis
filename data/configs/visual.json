@@ -1,0 +1,66 @@
+{
+    "iterations": 0,
+    "clock": {
+        "enabled": true,
+        "duration": 15,
+        "frame_delay": 0.1,
+        "time_format": "24",
+        "scale": 5
+    },
+    "starfield": {
+        "enabled": true,
+        "duration": 20,
+        "num_stars": 25000,
+        "speed": 0.4,
+        "frame_delay": 0.04
+    },
+    "fire": {
+        "enabled": true,
+        "duration": 15,
+        "frame_delay": 0.04,
+        "intensity": 2
+    },
+    "wave": {
+        "enabled": true,
+        "duration": 20,
+        "num_waves": 4,
+        "mode": "random",
+        "frame_delay": 0.05
+    },
+    "bouncing_balls": {
+        "enabled": true,
+        "duration": 10,
+        "num_balls": 200,
+        "gravity": 25,
+        "frame_delay": 0.04,
+        "trail_length": 12,
+        "damping": 0.92
+    },
+    "tunnel": {
+        "enabled": true,
+        "duration": 20,
+        "frame_delay": 0.06,
+        "speed": 4.0,
+        "depth_scale": -2.0
+    },
+    "fireworks": {
+        "enabled": true,
+        "duration": 15,
+        "frame_delay": 0.04,
+        "gravity": 15,
+        "launch_rate": 1.5,
+        "simple_count": 8,
+        "fall_count": 8,
+        "ring_count": 12,
+        "willow_count": 6,
+        "multi_count": 3,
+        "multi_secondary_count": 6,
+        "multi_fade_duration": 0.15,
+        "simple_speed": [45, 65],
+        "fall_speed": [45, 60],
+        "ring_speed": [50, 65],
+        "willow_speed": [25, 35],
+        "multi_speed": [30, 42],
+        "multi_secondary_speed": [70, 90]
+    }
+}

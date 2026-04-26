@@ -1,0 +1,15 @@
+{
+    "iterations": 1,
+    "shaded_mesh": {
+        "enabled": true,
+        "mesh_file": "data/meshes",
+        "duration": 25,
+        "frame_delay": 0.05,
+        "mesh_scale": 1.0,
+        "distance": 4.0,
+        "focal_factor": 0.7,
+        "angular_speed": 0.6,
+        "ambient": 0.15,
+        "light_offset": [3.0, 2.0, 0.0]
+    }
+}
