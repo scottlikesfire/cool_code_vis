@@ -11,7 +11,6 @@
     },
     "bouncing_mesh": {
         "enabled": true,
-        "mesh_file": "data/meshes/cube.obj",
         "duration": 25,
         "frame_delay": 0.04,
         "mesh_scale": 1.0,

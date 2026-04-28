@@ -1,14 +1,14 @@
 {
     "iterations": 0,
     "bouncing_mesh": {
-        "enabled": false,
+        "enabled": true,
         "mesh_file": "data/meshes",
         "duration": 25,
         "frame_delay": 0.04,
         "mesh_scale": 1.0,
-        "box_x": 4.0,
-        "box_y": 2.5,
-        "box_z_min": 4.0,
+        "box_x": 7.5,
+        "box_y": 5.5,
+        "box_z_min": 1.5,
         "box_z_max": 10.0,
         "linear_speed": 2.5,
         "angular_speed": 1.5,

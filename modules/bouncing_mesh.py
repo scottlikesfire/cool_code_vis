@@ -145,9 +145,15 @@ def run(stdscr, mesh_file, duration, frame_delay, mesh_scale,
 
     display_name = os.path.basename(full_path) if full_path else "<fallback>"
 
-    # Center mesh on its centroid and scale
+    # Center on centroid, normalize to a unit bounding sphere, then apply
+    # mesh_scale. Matches shaded_mesh so the same mesh_scale, box, and speed
+    # parameters look consistent across any input mesh.
     centroid = verts.mean(axis=0)
-    verts = (verts - centroid) * float(mesh_scale)
+    verts = verts - centroid
+    raw_radius = float(np.linalg.norm(verts, axis=1).max())
+    if raw_radius > 1e-9:
+        verts = verts / raw_radius
+    verts = verts * float(mesh_scale)
     radius = float(np.linalg.norm(verts, axis=1).max())
 
     # Don't let bounding sphere exceed the box
