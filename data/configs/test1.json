@@ -15,9 +15,9 @@
         "duration": 25,
         "frame_delay": 0.04,
         "mesh_scale": 1.0,
-        "box_x": 4.0,
-        "box_y": 2.5,
-        "box_z_min": 4.0,
+        "box_x": 7.5,
+        "box_y": 5.5,
+        "box_z_min": 1.5,
         "box_z_max": 10.0,
         "linear_speed": 2.5,
         "angular_speed": 1.5,
@@ -176,7 +176,7 @@
         "mesh_file": "data/meshes",
         "duration": 25,
         "frame_delay": 0.05,
-        "mesh_scale": 1.0,
+        "mesh_scale": 2.5,
         "distance": 4.0,
         "focal_factor": 0.7,
         "angular_speed": 0.6,
@@ -209,7 +209,7 @@
         "num_disks": 8,
         "step_delay": 0.15,
         "completion_pause": 3,
-        "history_lines": 60
+        "history_lines": 25
     },
     "tunnel": {
         "enabled": true,
