@@ -8,19 +8,25 @@ from modules.bouncing_mesh import main as bouncing_mesh
 from modules.cellular_automaton import main as cellular_automaton
 from modules.clock import main as clock
 from modules.directory_structure_visualizer import main as directory_structure_visualizer
+from modules.dna_helix import main as dna_helix
+from modules.double_pendulum import main as double_pendulum
 from modules.fire import main as fire
 from modules.fireworks import main as fireworks
+from modules.fourier_epicycles import main as fourier_epicycles
 from modules.grapher import main as grapher
 from modules.hypercube import main as hypercube
 from modules.julia_set import main as julia_set
 from modules.knights_tour import main as knights_tour
 from modules.letter_frequency import main as letter_frequency
+from modules.lorenz_attractor import main as lorenz_attractor
 from modules.mandelbrot import main as mandelbrot
 from modules.matrix_rain import main as matrix_rain
 from modules.maze_generator import main as maze_generator
 from modules.metaprogramming_imports import main as metaprogramming_imports
+from modules.n_body import main as n_body
 from modules.n_queens import main as n_queens
 from modules.pathfinding import main as pathfinding
+from modules.predator_prey import main as predator_prey
 from modules.plasma import main as plasma
 from modules.prime_sieve import main as prime_sieve
 from modules.progress_bars import main as progress_bars
@@ -34,6 +40,7 @@ from modules.tower_of_hanoi import main as tower_of_hanoi
 from modules.tunnel import main as tunnel
 from modules.unredact import main as unredact
 from modules.wave import main as wave
+from modules.wolfram_rule import main as wolfram_rule
 
 MODULES = {
     "bouncing_balls": bouncing_balls,
@@ -41,20 +48,26 @@ MODULES = {
     "cellular_automaton": cellular_automaton,
     "clock": clock,
     "directory_structure_visualizer": directory_structure_visualizer,
+    "dna_helix": dna_helix,
+    "double_pendulum": double_pendulum,
     "fire": fire,
     "fireworks": fireworks,
+    "fourier_epicycles": fourier_epicycles,
     "grapher": grapher,
     "hypercube": hypercube,
     "julia_set": julia_set,
     "knights_tour": knights_tour,
     "letter_frequency": letter_frequency,
+    "lorenz_attractor": lorenz_attractor,
     "mandelbrot": mandelbrot,
     "matrix_rain": matrix_rain,
     "maze_generator": maze_generator,
     "metaprogramming_imports": metaprogramming_imports,
+    "n_body": n_body,
     "n_queens": n_queens,
     "pathfinding": pathfinding,
     "plasma": plasma,
+    "predator_prey": predator_prey,
     "prime_sieve": prime_sieve,
     "progress_bars": progress_bars,
     "rainbow_code": rainbow_code,
@@ -67,6 +80,7 @@ MODULES = {
     "tunnel": tunnel,
     "unredact": unredact,
     "wave": wave,
+    "wolfram_rule": wolfram_rule,
 }
 
 CONFIG_DIR = os.path.join(os.path.dirname(__file__), "data", "configs")

@@ -1,0 +1,87 @@
+{
+    "iterations": 0,
+    "double_pendulum": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.04,
+        "m1": 1.0,
+        "m2": 1.0,
+        "l1": 3.3,
+        "l2": 2.8,
+        "g": 9.81,
+        "sub_steps": 8,
+        "trail_length": 200,
+        "scale": 4.0
+    },
+    "n_body": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.04,
+        "num_planets": 7,
+        "sub_steps": 4,
+        "trail_length": 120,
+        "view_scale": 1.2,
+        "G": 1.0,
+        "softening": 0.5,
+        "sun_mass": 50000.0,
+        "velocity_jitter": 0.3,
+        "tangent_jitter": 0.25,
+        "radius_jitter": 2.0,
+        "planet_mass_min": 50.0,
+        "planet_mass_max": 400.0
+    },
+    "dna_helix": {
+        "enabled": true,
+        "duration": 15,
+        "frame_delay": 0.05,
+        "num_pairs": 20,
+        "twist_speed": 0.6,
+        "radius": 20.0,
+        "bp_per_turn": 10,
+        "helix_height": 20
+    },
+    "lorenz_attractor": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.02,
+        "sigma": 10.0,
+        "rho": 28.0,
+        "beta": 2.6666666,
+        "sub_steps": 10,
+        "sub_dt": 0.005,
+        "trail_length": 400,
+        "scale": 0.95,
+        "view_rotation_speed": 0.15
+    },
+    "predator_prey": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.05,
+        "alpha": 1.0,
+        "beta": 0.4,
+        "delta": 0.1,
+        "gamma": 0.4,
+        "sim_speed": 2.0,
+        "x0": 10.0,
+        "y0": 5.0,
+        "history_size": 400
+    },
+    "wolfram_rule": {
+        "enabled": true,
+        "duration": 12,
+        "frame_delay": 0.04,
+        "rule": "random",
+        "seed_mode": "single"
+    },
+    "fourier_epicycles": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.04,
+        "num_terms": 8,
+        "total_amplitude": 12.5,
+        "omega": 0.8,
+        "scale": 2.0,
+        "wave_history": 120,
+        "wave_type": "random"
+    }
+}
