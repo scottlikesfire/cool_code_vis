@@ -11,6 +11,7 @@
     },
     "bouncing_mesh": {
         "enabled": true,
+        "mesh_file": "data/meshes",
         "duration": 25,
         "frame_delay": 0.04,
         "mesh_scale": 1.0,
@@ -181,6 +182,16 @@
         "angular_speed": 0.6,
         "ambient": 0.15,
         "light_offset": [3.0, 2.0, 0.0]
+    },
+        "hypercube": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.04,
+        "distance_4d": 3.0,
+        "distance": 5.0,
+        "focal_factor": 0.7,
+        "mesh_scale": 1.0,
+        "angular_speeds": [0.3, 0.0, 0.5, 0.0, 0.4, 0.6]
     },
     "sorting_visualizer": {
         "enabled": true,

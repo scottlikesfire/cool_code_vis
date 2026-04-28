@@ -11,6 +11,7 @@ from modules.directory_structure_visualizer import main as directory_structure_v
 from modules.fire import main as fire
 from modules.fireworks import main as fireworks
 from modules.grapher import main as grapher
+from modules.hypercube import main as hypercube
 from modules.julia_set import main as julia_set
 from modules.knights_tour import main as knights_tour
 from modules.letter_frequency import main as letter_frequency
@@ -43,6 +44,7 @@ MODULES = {
     "fire": fire,
     "fireworks": fireworks,
     "grapher": grapher,
+    "hypercube": hypercube,
     "julia_set": julia_set,
     "knights_tour": knights_tour,
     "letter_frequency": letter_frequency,
