@@ -1,7 +1,7 @@
 {
     "iterations": 0,
     "double_pendulum": {
-        "enabled": true,
+        "enabled": false,
         "duration": 25,
         "frame_delay": 0.04,
         "m1": 1.0,
@@ -14,7 +14,7 @@
         "scale": 4.0
     },
     "n_body": {
-        "enabled": true,
+        "enabled": false,
         "duration": 25,
         "frame_delay": 0.04,
         "num_planets": 7,
@@ -31,7 +31,7 @@
         "planet_mass_max": 400.0
     },
     "dna_helix": {
-        "enabled": true,
+        "enabled": false,
         "duration": 15,
         "frame_delay": 0.05,
         "num_pairs": 20,
@@ -41,7 +41,7 @@
         "helix_height": 20
     },
     "lorenz_attractor": {
-        "enabled": true,
+        "enabled": false,
         "duration": 25,
         "frame_delay": 0.02,
         "sigma": 10.0,
@@ -54,7 +54,7 @@
         "view_rotation_speed": 0.15
     },
     "predator_prey": {
-        "enabled": true,
+        "enabled": false,
         "duration": 25,
         "frame_delay": 0.05,
         "alpha": 1.0,
@@ -67,14 +67,14 @@
         "history_size": 400
     },
     "wolfram_rule": {
-        "enabled": true,
+        "enabled": false,
         "duration": 12,
         "frame_delay": 0.04,
         "rule": "random",
         "seed_mode": "single"
     },
     "fourier_epicycles": {
-        "enabled": true,
+        "enabled": false,
         "duration": 25,
         "frame_delay": 0.04,
         "num_terms": 8,
@@ -83,5 +83,103 @@
         "scale": 2.0,
         "wave_history": 120,
         "wave_type": "random"
+    },
+    "boids": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.04,
+        "num_boids": 600,
+        "sep_dist": 2.5,
+        "neigh_dist": 10.0,
+        "max_speed": 15.0,
+        "sep_w": 8.0,
+        "align_w": 4.0,
+        "coh_w": 2.0
+    },
+    "ising_model": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.05,
+        "J": 1.0,
+        "sweeps_per_frame": 1,
+        "T_min": 1.1,
+        "T_max": 2.5,
+        "T_period": 20.0
+    },
+    "wave_on_string": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.04,
+        "c2": 0.3,
+        "damping": 0.0015,
+        "pulse_interval": 4.0,
+        "amplitude": 1.0,
+        "pulse_strength": 0.04,
+        "steps_per_frame": 2
+    },
+    "ulam_spiral": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.005,
+        "max_n": 8000,
+        "numbers_per_frame": 8,
+        "completion_pause": 4
+    },
+    "pendulum_wave": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "num_pendulums": 14,
+        "T_beat": 30.0,
+        "period_offset": 20,
+        "amplitude_deg": 18.0
+    },
+    "gray_scott": {
+        "enabled": true,
+        "duration": 15,
+        "frame_delay": 0.004,
+        "preset": "random",
+        "sub_steps": 8,
+        "dt": 1.0,
+        "color_choice": "random"
+    },
+    "solar_orrery": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.04,
+        "time_scale": 1.0,
+        "show_outer": true,
+        "show_labels": true,
+        "time_jitter": 0.0
+    },
+    "sir_epidemic": {
+        "enabled": true,
+        "duration": 20,
+        "frame_delay": 0.05,
+        "beta": 0.18,
+        "gamma": 0.04,
+        "initial_infected": 3,
+        "history_size": 400,
+        "grid_fraction": 0.65
+    },
+    "dla": {
+        "enabled": true,
+        "duration": 12,
+        "frame_delay": 0.004,
+        "walkers_per_frame": 16,
+        "max_walker_steps": 1500,
+        "seed_mode": "center",
+        "seed_count": 5,
+        "particles_per_color": 80,
+        "spawn_buffer": 4,
+        "kill_buffer": 20
+    },
+    "lsystem": {
+        "enabled": true,
+        "duration": 9,
+        "frame_delay": 0.04,
+        "preset": "random",
+        "segments_per_frame": 10,
+        "completion_pause": 3
     }
 }

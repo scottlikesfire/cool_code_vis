@@ -3,22 +3,27 @@ import os
 import random
 import sys
 
+from modules.boids import main as boids
 from modules.bouncing_balls import main as bouncing_balls
 from modules.bouncing_mesh import main as bouncing_mesh
 from modules.cellular_automaton import main as cellular_automaton
 from modules.clock import main as clock
 from modules.directory_structure_visualizer import main as directory_structure_visualizer
+from modules.dla import main as dla
 from modules.dna_helix import main as dna_helix
 from modules.double_pendulum import main as double_pendulum
 from modules.fire import main as fire
 from modules.fireworks import main as fireworks
 from modules.fourier_epicycles import main as fourier_epicycles
 from modules.grapher import main as grapher
+from modules.gray_scott import main as gray_scott
 from modules.hypercube import main as hypercube
+from modules.ising_model import main as ising_model
 from modules.julia_set import main as julia_set
 from modules.knights_tour import main as knights_tour
 from modules.letter_frequency import main as letter_frequency
 from modules.lorenz_attractor import main as lorenz_attractor
+from modules.lsystem import main as lsystem
 from modules.mandelbrot import main as mandelbrot
 from modules.matrix_rain import main as matrix_rain
 from modules.maze_generator import main as maze_generator
@@ -26,6 +31,7 @@ from modules.metaprogramming_imports import main as metaprogramming_imports
 from modules.n_body import main as n_body
 from modules.n_queens import main as n_queens
 from modules.pathfinding import main as pathfinding
+from modules.pendulum_wave import main as pendulum_wave
 from modules.predator_prey import main as predator_prey
 from modules.plasma import main as plasma
 from modules.prime_sieve import main as prime_sieve
@@ -33,32 +39,41 @@ from modules.progress_bars import main as progress_bars
 from modules.rainbow_code import main as rainbow_code
 from modules.rss_feed_reader import main as rss_feed_reader
 from modules.shaded_mesh import main as shaded_mesh
+from modules.sir_epidemic import main as sir_epidemic
+from modules.solar_orrery import main as solar_orrery
 from modules.sorting_visualizer import main as sorting_visualizer
 from modules.starfield import main as starfield
 from modules.sudoku import main as sudoku
 from modules.tower_of_hanoi import main as tower_of_hanoi
 from modules.tunnel import main as tunnel
+from modules.ulam_spiral import main as ulam_spiral
 from modules.unredact import main as unredact
 from modules.wave import main as wave
+from modules.wave_on_string import main as wave_on_string
 from modules.wolfram_rule import main as wolfram_rule
 
 MODULES = {
+    "boids": boids,
     "bouncing_balls": bouncing_balls,
     "bouncing_mesh": bouncing_mesh,
     "cellular_automaton": cellular_automaton,
     "clock": clock,
     "directory_structure_visualizer": directory_structure_visualizer,
+    "dla": dla,
     "dna_helix": dna_helix,
     "double_pendulum": double_pendulum,
     "fire": fire,
     "fireworks": fireworks,
     "fourier_epicycles": fourier_epicycles,
     "grapher": grapher,
+    "gray_scott": gray_scott,
     "hypercube": hypercube,
+    "ising_model": ising_model,
     "julia_set": julia_set,
     "knights_tour": knights_tour,
     "letter_frequency": letter_frequency,
     "lorenz_attractor": lorenz_attractor,
+    "lsystem": lsystem,
     "mandelbrot": mandelbrot,
     "matrix_rain": matrix_rain,
     "maze_generator": maze_generator,
@@ -66,6 +81,7 @@ MODULES = {
     "n_body": n_body,
     "n_queens": n_queens,
     "pathfinding": pathfinding,
+    "pendulum_wave": pendulum_wave,
     "plasma": plasma,
     "predator_prey": predator_prey,
     "prime_sieve": prime_sieve,
@@ -73,13 +89,17 @@ MODULES = {
     "rainbow_code": rainbow_code,
     "rss_feed_reader": rss_feed_reader,
     "shaded_mesh": shaded_mesh,
+    "sir_epidemic": sir_epidemic,
+    "solar_orrery": solar_orrery,
     "sorting_visualizer": sorting_visualizer,
     "starfield": starfield,
     "sudoku": sudoku,
     "tower_of_hanoi": tower_of_hanoi,
     "tunnel": tunnel,
+    "ulam_spiral": ulam_spiral,
     "unredact": unredact,
     "wave": wave,
+    "wave_on_string": wave_on_string,
     "wolfram_rule": wolfram_rule,
 }
 

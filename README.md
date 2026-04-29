@@ -3,9 +3,11 @@
 > **Heavily Vibe Coded, But All About the Vibes**
 
 A growing collection of terminal visualizers — basically a screensaver app you
-can run from a TTY. It currently ships **30 modules** spanning fractals,
-backtracking algorithms, fluid effects, particle systems, ASCII 3D rendering,
-text/data toys, and a few weird ideas that just looked cool.
+can run from a TTY. It currently ships **48 modules** spanning fractals,
+backtracking algorithms, fluid effects, particle systems, ASCII 3D and 4D
+rendering, scientific dynamics simulations (physics, biology, chemistry,
+astronomy, math), text/data toys, and a few weird ideas that just looked
+cool.
 
 The whole thing is driven by a single config file that picks which modules to
 randomly cycle through.
@@ -33,8 +35,9 @@ conda activate cool_code
 pip install -r requirements.txt
 
 # 3. Generate the procedural mesh library. Everything in data/meshes/
-#    except n64.obj is produced by this script.
-python generate_meshes.py
+#    except n64.obj is produced by these two scripts.
+python generate_meshes.py           # platonic solids, sphere, torus, knot
+python generate_advanced_meshes.py  # cones, cylinders, Möbius, Menger, etc.
 ```
 
 After that, you're ready to run.
@@ -50,9 +53,11 @@ python main.py test1.json
 # Or one of the curated subsets
 python main.py visual.json       # pure visual effects
 python main.py algorithms.json   # backtracking / search / fractals
+python main.py science.json      # physics / biology / dynamics / math
 python main.py mesh.json         # the two 3D mesh visualizers
 python main.py shaded_mesh.json  # just the shaded 3D renderer
 python main.py bouncing_mesh.json
+python main.py hypercube.json    # rotating 4D tesseract
 ```
 
 Press **`q`** or **`ESC`** at any time to skip to the next module.
@@ -155,16 +160,19 @@ animation pacing and a `completion_pause` to hold the final frame.
 - **`tunnel`** — radial depth-warping pulse that recedes outward with
   concentric color bands cycling through the palette.
 
-### 3D mesh visualizers
+### 3D / 4D mesh visualizers
 
-Both load `.obj` files via `scottlib.utils.mesh.read_obj`. The `mesh_file`
-parameter accepts either a single `.obj` path or a directory (in which case a
-random `.obj` is chosen each run).
+The two `.obj`-loading modules use `scottlib.utils.mesh.read_obj`. Their
+`mesh_file` parameter accepts either a single `.obj` path or a directory (in
+which case a random `.obj` is chosen each run). The `hypercube` module has
+no input file — its geometry is hardcoded.
 
 - **`bouncing_mesh`** — DVD-logo-style 3D bouncing. The mesh floats around
   inside a configurable 3D box, with linear and angular velocity. Wall hits
   reflect velocity, snap the object inside, and randomly perturb the spin
-  axis. Vertices project to white `@`, rasterized edges to green `*`.
+  axis. Vertices project to white `@`, rasterized edges to green `*`. Meshes
+  are auto-centered and normalized to a unit bounding sphere so the same
+  box / speed parameters work for any mesh.
 - **`shaded_mesh`** — solid 3D rendering. Object sits in front of a virtual
   camera, slowly rotating around a random axis. Each frame:
   - All meshes are auto-centered on their centroid and rescaled to a unit
@@ -182,6 +190,107 @@ random `.obj` is chosen each run).
     density gradient `" .:-=+*#%@"` plus `A_DIM`/`A_BOLD` for an extended
     dynamic range.
   - Object color is randomly chosen from the 8-color palette per run.
+- **`hypercube`** — wireframe rotating tesseract (4D cube). Hardcoded
+  geometry: 16 vertices at every `(±1,±1,±1,±1)`, 32 edges. There's no
+  single rotation axis in 4D, so each of the six coordinate planes
+  (`xy / xz / xw / yz / yw / zw`) rotates at its own configurable angular
+  speed. **4D → 3D** projection scales by `1/(distance_4d − w)`, so vertices
+  closer to the 4D camera appear larger — that's what produces the classic
+  "inner cube swaps with outer cube" tesseract look. Then standard 3D → 2D
+  pinhole projection gives the screen output. Vertices as white `@`, edges
+  as rasterized green `*`.
+
+### Science & dynamics
+
+Each of these is a small physical / mathematical / biological / chemical
+simulation, animated continuously.
+
+**Classical physics**
+
+- **`double_pendulum`** — RK4-integrated chaotic two-link pendulum (full
+  Lagrangian equations). Two arms swing from a top pivot; the end bob
+  leaves a long fading cyan trail that exposes the chaotic orbit.
+  Configurable masses, lengths, gravity, sub-step count.
+- **`pendulum_wave`** — `num_pendulums` simple-harmonic pendulums hanging
+  from a horizontal pivot bar with periods `T_i = T_beat/(period_offset+i)`.
+  They start in phase, drift apart over the course of `T_beat` seconds,
+  briefly form traveling-wave patterns, then snap back into sync. Each
+  pendulum is one continuous color from pivot to bob.
+- **`wave_on_string`** — Discrete 1D wave equation with fixed boundaries.
+  Random Gaussian pulses are injected periodically and propagate, reflect
+  off the ends, and superpose. `amplitude` is the **display scale** (u value
+  that fills the chart); `pulse_strength` controls the size of injected
+  pulses, decoupled from display.
+- **`n_body`** — Sun-plus-planets gravitational simulation. Each planet is
+  initialized with randomized velocity magnitude, tangent direction, and
+  orbital radius, plus mass ~1/100 of the sun, so orbits are eccentric and
+  planets perturb each other — occasionally producing decay, scattering,
+  capture, or ejection events.
+- **`lorenz_attractor`** — Standard `σ, ρ, β` parameters via RK4. The
+  trail's color cycles through the full palette by age. Slow view rotation
+  around the z-axis gives a 3D feel.
+
+**Statistical / soft-matter physics**
+
+- **`ising_model`** — 2D Metropolis Monte Carlo on the full terminal
+  lattice with periodic boundary conditions. Temperature sinusoidally
+  sweeps across the critical point so you watch the lattice condense into
+  magnetic domains below `Tc≈2.269` and dissolve back into noise above.
+  Live `M = ⟨s⟩` shown in the status bar.
+- **`gray_scott`** — Reaction-diffusion (Turing patterns). Two species U/V
+  evolve via `∂U/∂t = D_u∇²U − UV² + F(1−U)`,
+  `∂V/∂t = D_v∇²V + UV² − (F+k)V`. Six named feed/kill presets — `spots`,
+  `stripes`, `mazes`, `fingers`, `worms`, `ripples` — pick one per run.
+  Vectorized with NumPy `np.roll` for the periodic-BC Laplacian.
+- **`dla`** — Diffusion-limited aggregation. Random walkers stick on
+  contact with the seed cluster, slowly growing dendritic / coral-like
+  fractal structures. Uses smart spawning (walkers start on the cluster's
+  bounding box expanded by `spawn_buffer`, killed if they wander past
+  `kill_buffer`) so attachments happen in O(buffer²) steps instead of
+  O(screen²). Particles colored by sequence number.
+
+**Biology**
+
+- **`dna_helix`** — Horizontally-running double helix with random A/T/G/C
+  sequence and properly Watson–Crick-paired letters. Backbones use depth
+  ordering so the front strand overdraws the back as the helix rotates.
+- **`predator_prey`** — Lotka–Volterra dynamics. Split-screen: left panel
+  is `prey/pred populations vs time`, right panel is the `phase portrait`
+  showing the closed orbit.
+- **`sir_epidemic`** — Spatial Moore-neighborhood SIR model. Top region is
+  the agent grid (S=`.`, I=`@`, R=`#`); bottom region plots S/I/R
+  populations over time. Auto-exits a couple seconds after the epidemic
+  burns out.
+- **`boids`** — Reynolds rules with separation, alignment, and cohesion
+  weights. Each boid renders as a directional ASCII arrow chosen from
+  velocity angle. Wrap-around boundaries.
+- **`lsystem`** — Turtle-graphics L-system fractals. Seven presets
+  (`fractal_tree`, `koch`, `koch_snowflake`, `sierpinski`, `dragon`,
+  `plant`, `sierpinski_arrowhead`); picks one randomly per run and animates
+  segments drawing in over time.
+
+**Astronomy**
+
+- **`solar_orrery`** — Inner + outer planets at correct relative orbital
+  periods (Mercury 0.241 yr → Neptune 164.79 yr). Sun at the origin, faint
+  dotted ellipses for orbits, color-coded markers with hovering name
+  labels. `time_scale` controls how many simulated years pass per real
+  second.
+
+**Math**
+
+- **`wolfram_rule`** — 1D elementary cellular automaton scrolling
+  downward. `rule="random"` picks each run from a curated set
+  `[30, 45, 73, 90, 105, 110, 150, 184]`. Newest generation is bold yellow.
+- **`fourier_epicycles`** — Chain of rotating circles whose tip y-position
+  draws the partial-sum waveform to the right. Picks among `square`,
+  `sawtooth`, `triangle`, and `pulse` Fourier expansions per run by
+  default. `Σ|a_n|` is normalized to `total_amplitude` so the on-screen
+  size is identical regardless of which waveform was chosen — only the
+  trail shape changes.
+- **`ulam_spiral`** — Sieve up to `max_n`, then walk a square spiral
+  plotting one integer per step. Primes are bold yellow `#`, composites
+  are dim blue `.`. Diagonals show the unexpected prime patterns.
 
 ### Code/repo-aware
 
@@ -246,10 +355,12 @@ I have not include most of the data I am using here, this is because I do not kn
 |---|---|
 | `test1.json` | Master config — every module enabled |
 | `visual.json` | Pure visual effects only |
-| `algorithms.json` | Algorithmic / search modules |
+| `algorithms.json` | Algorithmic / search / fractal modules |
+| `science.json` | Physics, biology, dynamics, math |
 | `mesh.json` | Both `bouncing_mesh` and `shaded_mesh` |
 | `bouncing_mesh.json` | Just `bouncing_mesh` |
 | `shaded_mesh.json` | Just `shaded_mesh` |
+| `hypercube.json` | Just the 4D tesseract |
 
 Make a new config by copying one of these and toggling `enabled` flags or
 tweaking parameters. Every module's `main()` signature is the source of truth
@@ -261,6 +372,8 @@ for what params it accepts.
 
 `data/meshes/` ships with a low-poly mesh set, kept small enough for TUI
 rendering:
+
+**Generated by `generate_meshes.py`:**
 
 | Mesh | V | F |
 |---|---|---|
@@ -274,14 +387,33 @@ rendering:
 | `torus` (12×6) | 72 | 72 |
 | `trefoil_knot` (32×4) | 128 | 128 |
 
-Regenerate the procedural meshes (everything except `cube` and `n64`) with:
+**Generated by `generate_advanced_meshes.py`:**
+
+| Mesh | V | F |
+|---|---|---|
+| `cone` | 14 | 24 |
+| `truncated_cone` | 26 | 48 |
+| `cylinder` | 26 | 48 |
+| `oblique_cylinder` | 26 | 36 |
+| `mobius_strip` (32×4) | 128 | 192 (doubled) |
+| `menger_sponge` (1 iter) | 160 | 120 |
+| `sierpinski_tetrahedron` (2 iter) | 64 | 64 |
+
+The Möbius strip emits each face *twice* with reversed winding — it's a
+non-orientable surface, so doubling lets backface culling pick the visible
+side regardless of rotation angle.
+
+**Checked in (not regenerated):** `n64.obj`.
+
+Regenerate the procedural meshes any time with:
 
 ```bash
 python generate_meshes.py
+python generate_advanced_meshes.py
 ```
 
-This writes fresh `.obj` files to `data/meshes/`. Tweak the parameters at the
-bottom of `generate_meshes.py` (or the generator defaults in
+Both write `.obj` files to `data/meshes/`. Tweak the parameters at the bottom
+of either script (or the generator defaults in
 `submodules/scottlib/shape_gen/meshes.py`) to change resolution.
 
 The OBJ I/O lives in `submodules/scottlib/utils/mesh.py` and supports
@@ -299,13 +431,20 @@ generators and the 3D visualizers. The pieces touched by this repo:
   writers. The OBJ functions handle any polygon size and the standard face
   formats (`v`, `v/vt`, `v//vn`, `v/vt/vn`).
 - **`scottlib.shape_gen.meshes`** — procedural mesh generators:
-  `generate_tetrahedron`, `generate_octahedron`, `generate_icosahedron`,
-  `generate_dodecahedron` (built as the dual of the icosahedron with an
-  outward-orientation pass on the resulting pentagons),
-  `generate_uv_sphere`, `generate_torus`, `generate_trefoil_knot` (Frenet
-  frames so the seam closes cleanly), `generate_stellated_octahedron`
-  (compound of two interpenetrating tetrahedra with reversed-winding Tet B),
-  plus the existing `generate_cylinder` and `generate_truncated_cone`.
+  - **Platonic & related:** `generate_tetrahedron`, `generate_cube`,
+    `generate_octahedron`, `generate_icosahedron`, `generate_dodecahedron`
+    (built as the dual of the icosahedron with an outward-orientation pass
+    on the resulting pentagons), `generate_stellated_octahedron`
+    (interpenetrating tetrahedra with reversed-winding Tet B).
+  - **Smooth surfaces:** `generate_uv_sphere`, `generate_torus`,
+    `generate_trefoil_knot` (Frenet frames so the seam closes cleanly).
+  - **Cones & cylinders:** `generate_cone`, `generate_cylinder`,
+    `generate_truncated_cone`, `generate_oblique_cylinder`.
+  - **Fractals:** `generate_menger_sponge` (3³ minus 7 sub-cubes per
+    iteration), `generate_sierpinski_tetrahedron` (4 corner sub-tets per
+    iteration with per-face outward-orientation correction).
+  - **Non-orientable:** `generate_mobius_strip` with the seam vertex flip
+    plus doubled-winding faces so both sides render.
 
 ---
 
@@ -313,17 +452,19 @@ generators and the 3D visualizers. The pieces touched by this repo:
 
 ```
 cool_code_vis/
-├── main.py                  # harness: load config, randomly pick modules
-├── generate_meshes.py       # rebuild data/meshes/ from scottlib generators
-├── modules/                 # one file per visualizer
-│   ├── _quit_helper.py      # shared cbreak-stdin polling utility
-│   └── …                    # 30 visualization modules
+├── main.py                          # harness: load config, randomly pick modules
+├── generate_meshes.py               # platonic solids, sphere, torus, knot
+├── generate_advanced_meshes.py      # cones, cylinders, Möbius, fractals
+├── requirements.txt
+├── modules/                         # one file per visualizer
+│   ├── _quit_helper.py              # shared cbreak-stdin polling utility
+│   └── …                            # 48 visualization modules
 ├── data/
-│   ├── configs/             # JSON configs
-│   ├── meshes/              # .obj files used by the 3D visualizers
-│   └── text/                # words.txt, moby_dick.txt for text-based modules
+│   ├── configs/                     # JSON configs
+│   ├── meshes/                      # .obj files used by the 3D visualizers
+│   └── text/                        # words.txt, moby_dick.txt
 └── submodules/
-    └── scottlib/            # mesh I/O, procedural geometry, coordinates
+    └── scottlib/                    # mesh I/O, procedural geometry, coordinates
 ```
 
 ---
