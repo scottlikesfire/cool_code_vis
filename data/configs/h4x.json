@@ -1,0 +1,79 @@
+{
+    "iterations": 0,
+    "scheduler": {
+        "no_repeat_window": 3
+    },
+    "bluetooth_scan": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.1,
+        "refresh_interval": 5,
+        "simulate": false
+    },
+    "connections": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.15,
+        "refresh_interval": 3.0,
+        "simulate": false
+    },
+    "decryption": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.04,
+        "key_length": 64,
+        "completion_pause": 2.5
+    },
+    "matrix_breach": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.05,
+        "phase_time": 5.0,
+        "rain_density": 0.15
+    },
+    "netmap": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.1,
+        "refresh_interval": 4.0,
+        "simulate": false
+    },
+    "nmap_replay": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "num_hosts": 8,
+        "scan_speed": 1.0
+    },
+    "packet_sniffer": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.06,
+        "poll_interval": 1.0,
+        "max_pps": 40,
+        "simulate": false
+    },
+    "port_scanner": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.03,
+        "target": "127.0.0.1",
+        "connect_timeout": 0.3,
+        "completion_pause": 3,
+        "workers": 50
+    },
+    "wifi_scan": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.1,
+        "refresh_interval": 4,
+        "simulate": false
+    },
+    "worldmap_attack": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.05,
+        "spawn_rate": 4.0,
+        "max_active": 25
+    }
+}

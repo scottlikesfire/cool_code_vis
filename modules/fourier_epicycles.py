@@ -141,8 +141,14 @@ def run(stdscr, duration, frame_delay, num_terms, total_amplitude,
         epi_cx = max_x * 0.22
         cy = max_y / 2
 
+        # Shrink scale to fit if the chain's vertical reach would exceed the
+        # plot area — otherwise the tip y leaves the screen and _put silently
+        # drops those samples, making the wave appear to stop.
+        max_reach = max(1.0, max_y / 2 - 2)
+        eff_scale = min(scale, max_reach / total_amplitude) if total_amplitude > 0 else scale
+
         # Width of the epicycle stack (chained circle radii, in screen x).
-        max_x_extent = sum(2 * scale * abs(amp) for amp, _ in terms)
+        max_x_extent = sum(2 * eff_scale * abs(amp) for amp, _ in terms)
         wave_x0 = int(epi_cx + max_x_extent + 2)
         wave_x0 = max(wave_x0, int(epi_cx + 4))
         wave_x0 = min(wave_x0, max_x - 6)
@@ -153,7 +159,7 @@ def run(stdscr, duration, frame_delay, num_terms, total_amplitude,
         y = cy
         positions = [(x, y)]
         for amp, freq in terms:
-            r = scale * abs(amp)
+            r = eff_scale * abs(amp)
             sign = 1.0 if amp >= 0 else -1.0
             angle = freq * omega * elapsed
             nx = x + 2 * r * math.cos(angle) * sign
@@ -169,7 +175,7 @@ def run(stdscr, duration, frame_delay, num_terms, total_amplitude,
 
         # Draw the circles
         for (cx_i, cy_i), (amp, _) in zip(positions[:-1], terms):
-            r = scale * abs(amp)
+            r = eff_scale * abs(amp)
             draw_circle(stdscr, cx_i, cy_i, r,
                         curses.color_pair(COLOR_CIRCLE) | curses.A_DIM,
                         max_y, max_x)

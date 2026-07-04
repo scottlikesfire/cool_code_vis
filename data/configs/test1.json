@@ -1,5 +1,8 @@
 {
     "iterations": 0,
+    "scheduler": {
+        "no_repeat_window": 3
+    },
     "bouncing_balls": {
         "enabled": true,
         "duration": 10,
@@ -64,12 +67,30 @@
         "multi_count": 3,
         "multi_secondary_count": 6,
         "multi_fade_duration": 0.15,
-        "simple_speed": [45, 65],
-        "fall_speed": [45, 60],
-        "ring_speed": [50, 65],
-        "willow_speed": [25, 35],
-        "multi_speed": [30, 42],
-        "multi_secondary_speed": [70, 90]
+        "simple_speed": [
+            45,
+            65
+        ],
+        "fall_speed": [
+            45,
+            60
+        ],
+        "ring_speed": [
+            50,
+            65
+        ],
+        "willow_speed": [
+            25,
+            35
+        ],
+        "multi_speed": [
+            30,
+            42
+        ],
+        "multi_secondary_speed": [
+            70,
+            90
+        ]
     },
     "grapher": {
         "enabled": true,
@@ -181,9 +202,13 @@
         "focal_factor": 0.7,
         "angular_speed": 0.6,
         "ambient": 0.15,
-        "light_offset": [3.0, 2.0, 0.0]
+        "light_offset": [
+            3.0,
+            2.0,
+            0.0
+        ]
     },
-        "hypercube": {
+    "hypercube": {
         "enabled": true,
         "duration": 25,
         "frame_delay": 0.04,
@@ -191,7 +216,14 @@
         "distance": 5.0,
         "focal_factor": 0.7,
         "mesh_scale": 1.0,
-        "angular_speeds": [0.3, 0.0, 0.5, 0.0, 0.4, 0.6]
+        "angular_speeds": [
+            0.3,
+            0.0,
+            0.5,
+            0.0,
+            0.4,
+            0.6
+        ]
     },
     "sorting_visualizer": {
         "enabled": true,
@@ -242,7 +274,7 @@
         "num_waves": 4,
         "mode": "random",
         "frame_delay": 0.05
-    }, 
+    },
     "double_pendulum": {
         "enabled": true,
         "duration": 25,
@@ -327,7 +359,7 @@
         "wave_history": 120,
         "wave_type": "random"
     },
-     "boids": {
+    "boids": {
         "enabled": true,
         "duration": 25,
         "frame_delay": 0.04,
@@ -424,5 +456,254 @@
         "preset": "random",
         "segments_per_frame": 10,
         "completion_pause": 3
+    },
+    "ant_colony": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.06,
+        "num_cities": 18,
+        "num_ants": 24,
+        "alpha": 1.0,
+        "beta": 3.0,
+        "evaporation": 0.45
+    },
+    "bifurcation": {
+        "enabled": true,
+        "duration": 28,
+        "frame_delay": 0.03,
+        "r_min": 2.8,
+        "r_max": 4.0,
+        "cols_per_frame": 2,
+        "samples": 300
+    },
+    "bluetooth_scan": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.1,
+        "refresh_interval": 5,
+        "simulate": false
+    },
+    "chaos_game": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.03,
+        "points_per_frame": 2000,
+        "switch_time": 8
+    },
+    "chladni": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "max_mode": 7,
+        "morph_time": 2.5,
+        "hold_time": 2.0
+    },
+    "connections": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.15,
+        "refresh_interval": 3.0,
+        "simulate": false
+    },
+    "cyclic_ca": {
+        "enabled": true,
+        "duration": 28,
+        "frame_delay": 0.06,
+        "num_states": 12,
+        "threshold": 1,
+        "moore": false
+    },
+    "decryption": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.04,
+        "key_length": 64,
+        "completion_pause": 2.5
+    },
+    "falling_sand": {
+        "enabled": true,
+        "duration": 28,
+        "frame_delay": 0.04,
+        "spawn_rate": 3,
+        "fill_limit": 0.7
+    },
+    "galton_board": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "rows": 10,
+        "ball_rate": 3,
+        "fall_speed": 14.0
+    },
+    "langtons_ant": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "num_ants": 3,
+        "rule": "random",
+        "steps_per_frame": 120
+    },
+    "matrix_breach": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.05,
+        "phase_time": 5.0,
+        "rain_density": 0.15
+    },
+    "metaballs": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.04,
+        "num_blobs": 5,
+        "threshold": 1.0
+    },
+    "netmap": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.1,
+        "refresh_interval": 4.0,
+        "simulate": false
+    },
+    "nmap_replay": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "num_hosts": 8,
+        "scan_speed": 1.0
+    },
+    "packet_sniffer": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.06,
+        "poll_interval": 1.0,
+        "max_pps": 40,
+        "simulate": false
+    },
+    "percolation": {
+        "enabled": true,
+        "duration": 28,
+        "frame_delay": 0.04,
+        "p_start": 0.35,
+        "p_end": 0.75,
+        "sweep_time": 12.0,
+        "completion_pause": 1.5
+    },
+    "port_scanner": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.03,
+        "target": "127.0.0.1",
+        "connect_timeout": 0.3,
+        "completion_pause": 3,
+        "workers": 50
+    },
+    "raymarch_sdf": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.05,
+        "morph_time": 4.0,
+        "hold_time": 2.0,
+        "march_steps": 56
+    },
+    "sandpile": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "grains_per_frame": 8,
+        "topple_iters_per_frame": 60
+    },
+    "slime_mold": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "num_agents": 4000,
+        "sensor_angle": 0.45,
+        "sensor_dist": 6.0,
+        "turn_speed": 0.35,
+        "decay": 0.9,
+        "deposit": 1.0
+    },
+    "snake_ai": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.05,
+        "min_delay": 0.02
+    },
+    "space_filling": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.02,
+        "segments_per_frame": 20,
+        "curve": "both",
+        "pause_time": 1.5
+    },
+    "spirograph": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.03,
+        "speed": 2.5,
+        "trail_len": 1200,
+        "hold_time": 2.0
+    },
+    "strange_attractors": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "batch": 2000,
+        "iters_per_frame": 3,
+        "drift": 0.15,
+        "switch_time": 10.0
+    },
+    "terrain_flyover": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.05,
+        "speed": 18.0,
+        "camera_height": 30.0,
+        "height_scale": 38.0,
+        "view_distance": 80
+    },
+    "turing_machine": {
+        "enabled": true,
+        "duration": 30,
+        "step_delay": 0.05,
+        "completion_pause": 2.5
+    },
+    "wifi_scan": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.1,
+        "refresh_interval": 4,
+        "simulate": false
+    },
+    "window_spawner": {
+        "enabled": true,
+        "weight": 0.3,
+        "duration": 90,
+        "frame_delay": 0.25,
+        "num_windows": 2,
+        "runs_per_window": 2,
+        "child_duration": 12,
+        "subset_size": 3
+    },
+    "wireworld": {
+        "enabled": true,
+        "duration": 28,
+        "frame_delay": 0.08,
+        "generations_per_frame": 1
+    },
+    "worldmap_attack": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.05,
+        "spawn_rate": 4.0,
+        "max_active": 25
+    },
+    "stock_crypto_ticker": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.12,
+        "simulate": true,
+        "refresh_interval": 15.0
     }
 }

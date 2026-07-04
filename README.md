@@ -3,11 +3,11 @@
 > **Heavily Vibe Coded, But All About the Vibes**
 
 A growing collection of terminal visualizers — basically a screensaver app you
-can run from a TTY. It currently ships **48 modules** spanning fractals,
+can run from a TTY. It currently ships **80 modules** spanning fractals,
 backtracking algorithms, fluid effects, particle systems, ASCII 3D and 4D
 rendering, scientific dynamics simulations (physics, biology, chemistry,
-astronomy, math), text/data toys, and a few weird ideas that just looked
-cool.
+astronomy, math), cellular automata, text/data toys, network/security eye
+candy, and a few weird ideas that just looked cool.
 
 The whole thing is driven by a single config file that picks which modules to
 randomly cycle through.
@@ -47,13 +47,15 @@ After that, you're ready to run.
 ## Quick start
 
 ```bash
-# Run the everything-enabled config
+# Run the everything-enabled config (all 80 modules)
 python main.py test1.json
 
 # Or one of the curated subsets
 python main.py visual.json       # pure visual effects
 python main.py algorithms.json   # backtracking / search / fractals
 python main.py science.json      # physics / biology / dynamics / math
+python main.py new.json          # the 20 newest CA / fractal / 3D modules
+python main.py orph.json         # network / security-themed modules
 python main.py mesh.json         # the two 3D mesh visualizers
 python main.py shaded_mesh.json  # just the shaded 3D renderer
 python main.py bouncing_mesh.json
@@ -67,29 +69,128 @@ Press **`q`** or **`ESC`** at any time to skip to the next module.
 ## How the harness works
 
 `main.py` reads a JSON config from `data/configs/`. Each top-level key (other
-than `iterations`) is a module name. Modules with `"enabled": true` go into
-the random pool; the harness picks one each iteration and passes the rest of
-the keys as keyword arguments to that module's `main()` function.
+than `iterations` and `scheduler`) is a module name. Modules with
+`"enabled": true` go into the random pool; the harness picks one each
+iteration and passes the rest of the keys as keyword arguments to that
+module's `main()` function.
+
+Three per-module keys are consumed by the scheduler instead of being passed
+to the module: `enabled`, `weight` (base selection weight, default 1.0), and
+`after` (a map of predecessor-module → multiplier, making this module more —
+or less — likely right after that predecessor runs).
 
 ```jsonc
 {
     "iterations": 0,        // 0 = loop forever; positive = run that many times
+    "scheduler": {          // optional; all keys have defaults
+        "no_repeat_window": 3,   // never repeat any of the last N modules (default 1)
+        "recency_boost": 0.25,   // >0 favors modules that haven't run in a while (default 0)
+        "track_history": true,   // append every run to the history file (default true)
+        "history_file": "data/run_history.json"
+    },
     "fireworks": {
         "enabled": true,
+        "weight": 2.0,           // twice as likely as a weight-1 module
         "duration": 25,
         "launch_rate": 1.5
         // ... module-specific params
     },
     "fire": {
         "enabled": true,
+        "after": {"fireworks": 4.0},  // 4x more likely right after fireworks
         "duration": 15,
         "intensity": 2
     }
 }
 ```
 
+Every run is appended to `data/run_history.json` (git-ignored): total run
+count, per-module counts, and the last 500 runs with timestamps. Recency
+weighting itself is per-session; the file is there for stats and future
+scheduling ideas.
+
 Between modules the harness clears the terminal so leftover content from one
 module never bleeds into the next.
+
+### The window spawner
+
+`window_spawner` is a meta-module that lives in the pool like any other.
+When it comes up it opens `num_windows` new terminal windows, each running
+`main.py` with a generated config of `subset_size` random modules from its
+`pool` (each window does `runs_per_window` iterations of `child_duration`
+seconds), shows a live status panel, and closes the windows when they finish.
+The spawned windows are deliberately **small and scattered at large random
+offsets** so they overlap but each stays visible — making it obvious that
+several independent things are running at once. Backends, tried in order: tmux panes (when running inside tmux —
+works on a bare TTY or over ssh), macOS Terminal.app, then a Linux GUI
+terminal (gnome-terminal / konsole / xfce4-terminal / xterm). With no backend
+available it politely skips its turn. In `test1.json` it's given a low
+`weight` so it comes up only occasionally.
+
+---
+
+## Running on other systems (Jetson, Raspberry Pi, headless)
+
+The app is pure-Python curses and runs anywhere Python + a terminal do, but a
+few things are worth knowing when moving off a desktop Mac/Linux box.
+
+**Dependencies.** On ARM SBCs, prefer the distro packages for the compiled
+libs so pip doesn't build them from source:
+
+```bash
+# Debian / Ubuntu / Jetson (L4T) / Raspberry Pi OS
+sudo apt install python3-numpy python3-scipy
+pip install asciimatics asciichartpy feedparser   # pure-Python, install anywhere
+```
+
+On Raspberry Pi OS, `piwheels` already ships prebuilt `numpy`/`scipy` wheels,
+so a plain `pip install -r requirements.txt` also works — it's just slower.
+
+**Performance.** Several modules recompute a full-screen NumPy/SciPy field
+every frame and are the ones to watch on weaker hardware (Pi 3/4, Jetson
+Nano): `slime_mold`, `terrain_flyover`, `raymarch_sdf`, `metaballs`,
+`gray_scott`, `cyclic_ca`, `chladni`, `strange_attractors`. If they can't keep
+up with their `frame_delay`, do any of:
+
+- run in a **smaller terminal window** (cost scales with rows × cols),
+- raise `frame_delay` (fewer frames/sec), and
+- lower the per-module knob that drives the work: `num_agents` (slime_mold),
+  `view_distance` (terrain_flyover), `march_steps` (raymarch_sdf),
+  `batch` (strange_attractors), `points_per_frame` (chaos_game).
+
+A Jetson (Nano/Orin) generally has plenty of headroom; the tighter squeeze is
+a Pi Zero/3 on a large console. The pure-curses modules (algorithms, meshes,
+particle systems) are cheap everywhere.
+
+**The window spawner** needs a way to open windows. On a headless console or
+over plain ssh there's no GUI terminal and it isn't macOS, so `window_spawner`
+**self-skips** — unless you run the whole app inside **tmux**, where it uses
+split panes and works on a bare TTY. If you want spawned windows on a Jetson/Pi,
+launch inside `tmux` (`sudo apt install tmux`).
+
+**Network / security modules and real data.** The `simulate: false` default
+means these read live data using OS tools that differ by platform:
+
+| Module | Linux (Jetson/Pi) uses | macOS uses |
+|---|---|---|
+| `connections`, `packet_sniffer` | `lsof`, `netstat` | same |
+| `netmap` | `arp` / `ip neigh` | `arp` |
+| `port_scanner` | raw socket + `netstat`/`route` | same |
+| `wifi_scan` | `nmcli` (NetworkManager) | `system_profiler` |
+| `bluetooth_scan` | `bluetoothctl` (BlueZ) | `system_profiler` |
+
+Install what you're missing (`sudo apt install lsof net-tools iproute2
+network-manager bluez`). Wi-Fi/Bluetooth scanning needs the actual radios and
+sometimes root; if a tool is absent or a scan returns nothing, the module
+falls back to (or you can force) its animated mode with `"simulate": true`.
+On a headless server with no radios, set `simulate: true` for `wifi_scan` and
+`bluetooth_scan`. These modules are Unix-oriented and are effectively
+simulate-only on Windows.
+
+**Locale / fonts.** A few modules (`space_filling`, `window_spawner` panel)
+use box-drawing characters. The Linux framebuffer console font may render
+these as blanks; over ssh in any modern UTF-8 terminal they're fine. Make sure
+your locale is UTF-8 (`export LANG=C.UTF-8`) if you see stray characters.
 
 ---
 
@@ -131,6 +232,24 @@ animation pacing and a `completion_pause` to hold the final frame.
 - **`julia_set`** — picks a random named Julia constant (Dendrite, Douady's
   Rabbit, Spiral, Siegel Disk, etc.) and morphs `c` along a small circular
   path so the fractal continuously evolves.
+- **`ant_colony`** — Ant Colony Optimization solving a travelling-salesman
+  instance live. Each iteration a colony builds tours by pheromone-weighted
+  probabilistic choice (`p ∝ τ^α·η^β`); pheromone evaporates and is
+  re-deposited along good tours. Trail strength is drawn as line brightness,
+  the best-so-far tour is overlaid, and it reseeds with new cities once it
+  converges.
+- **`snake_ai`** — Snake playing itself, competently. BFS shortest path to
+  the food, but only taken when a tail-reachability simulation says the move
+  is survivable; otherwise it chases its tail. Reliably fills most of the
+  board, speeding up as it grows.
+- **`turing_machine`** — Busy-beaver Turing machines running on a scrolling
+  tape. Ships BB-2/3/4 (halting at their known step and one-count records)
+  plus a non-halting "Christmas tree". The head stays centered, the active
+  transition-table row is highlighted, and it flashes `HALTED` with the final
+  counts before loading the next machine.
+- **`space_filling`** — Hilbert and dragon curves drawn stroke by stroke at
+  increasing order/iteration, colored as a rainbow gradient along traversal
+  order so you see the curve's ordering, not just its shape.
 
 ### Pure visual effects
 
@@ -159,6 +278,22 @@ animation pacing and a `completion_pause` to hold the final frame.
   configurable damping, and color-fading character trails.
 - **`tunnel`** — radial depth-warping pulse that recedes outward with
   concentric color bands cycling through the palette.
+- **`metaballs`** — lava-lamp blobs drifting on smooth sinusoidal paths. A
+  vectorized scalar field is thresholded into interior / contour-edge / glow
+  zones (marching-squares look) with a palette that slowly hue-shifts through
+  the spectrum; blobs occasionally shrink away and respawn.
+- **`spirograph`** — hypotrochoid / epitrochoid curves traced by a glowing
+  pen with an age-faded trail. Integer gear ratios guarantee each curve
+  closes; it holds the finished figure, clears, and picks new `R, r, d`.
+- **`raymarch_sdf`** — donut-style ASCII raymarcher. Signed-distance sphere,
+  torus, rounded box and octahedron are smooth-min blended and morph into one
+  another, rotating on two axes, Lambertian-shaded via central-difference
+  normals through a ` .,:;=+*#%@` luminance ramp. Fully NumPy-vectorized (all
+  pixels marched at once).
+- **`terrain_flyover`** — voxel-space (Comanche-style) flight over endless
+  procedural value-noise terrain. A per-column y-buffer gives correct
+  occlusion; height/distance shading runs water → lowland → hills → rock →
+  snow, and the camera banks and bobs as it flies. Vectorized per z-slice.
 
 ### 3D / 4D mesh visualizers
 
@@ -249,6 +384,38 @@ simulation, animated continuously.
   `kill_buffer`) so attachments happen in O(buffer²) steps instead of
   O(screen²). Particles colored by sequence number.
 
+**Cellular automata & complexity**
+
+- **`falling_sand`** — powder-game sandbox. Sand, water, stone and fire
+  interact cell-by-cell (sand piles and slides, water spreads, fire
+  flickers); drifting emitters near the top cycle which material they spawn,
+  and the grid dissolves and restarts once it fills. Vectorized falls with
+  numpy.
+- **`sandpile`** — the Abelian sandpile. Grains dropped at the center; any
+  cell with ≥4 grains topples to its four neighbors (vectorized), producing
+  self-similar fractal avalanche patterns. Toppling cells flash as the
+  cascade propagates.
+- **`langtons_ant`** — multi-ant Langton's Ant with generalized turn rules
+  (classic `LR`, longer strings like `LLRR`, or a random rule per run). Ants
+  leave colored cell-state trails and self-organize into "highways".
+- **`cyclic_ca`** — the cyclic (rock-paper-scissors) cellular automaton. A
+  cell advances to the next state when enough neighbors already hold it,
+  turning random noise into droplets and then rotating spirals across a
+  color-wheel palette. Reseeds when it reaches a fixed point.
+- **`wireworld`** — the Wireworld CA running hand-built circuits (a pair of
+  clock loops feeding diodes, an electron raceway, a diode OR-merge).
+  Electron heads/tails chase along conductor wires; circuits cycle every few
+  seconds.
+- **`percolation`** — site percolation with the occupation probability `p`
+  sweeping up through the critical threshold `p_c ≈ 0.5927`. Clusters are
+  labeled with `scipy.ndimage.label`; the cluster connected to the top is
+  highlighted, and it flashes when one spans top-to-bottom (percolates), then
+  resets with fresh random values.
+- **`slime_mold`** — a Physarum simulation. Thousands of agents (numpy
+  arrays) sense a pheromone trail map at three points, turn toward the
+  strongest, move and deposit; the map is diffused and decayed each frame,
+  self-organizing into branching vein networks. Fully vectorized.
+
 **Biology**
 
 - **`dna_helix`** — Horizontally-running double helix with random A/T/G/C
@@ -291,6 +458,22 @@ simulation, animated continuously.
 - **`ulam_spiral`** — Sieve up to `max_n`, then walk a square spiral
   plotting one integer per step. Primes are bold yellow `#`, composites
   are dim blue `.`. Diagonals show the unexpected prime patterns.
+- **`bifurcation`** — the logistic-map bifurcation diagram, drawn live. A
+  scan line sweeps `r` left to right, histogramming the map's attractor into
+  each column (period-doubling cascade into chaos), then zooms into windows
+  like the period-3 island and redraws at the new scale.
+- **`chaos_game`** — iterated-function-system fractals condensing out of
+  random points: Sierpinski triangle, a pentagon flake, the Barnsley fern,
+  and the Heighway dragon, each cycling in after a few seconds.
+- **`strange_attractors`** — a gallery of 2D map attractors (de Jong,
+  Clifford, Hopalong) rendered as a slowly-decaying density field with the
+  parameters drifting so the shape morphs organically, auto-fitting the view.
+- **`chladni`** — Chladni plate resonance figures. Brightness collects along
+  the nodal lines of a vibrating square plate for mode pair `(m, n)`, morphing
+  continuously between random mode pairs.
+- **`galton_board`** — a bean machine. Balls bounce left/right through a peg
+  pyramid into histogram bins, building a bell curve; once enough have landed
+  it overlays the expected normal distribution.
 
 ### Code/repo-aware
 
@@ -333,6 +516,72 @@ These reach into the repo itself for content.
 - **`progress_bars`** — multiple green progress bars with random hex titles
   finish at random fractions of the total duration; a blue overall bar
   finishes at exactly `duration`.
+- **`stock_crypto_ticker`** — a scrolling ticker tape across the top, a grid
+  of per-symbol panels (price, session change ▲/▼, and a block-character
+  sparkline), and an aggregate **portfolio line chart** across the bottom
+  tracking the total value of an equal-weight synthetic portfolio over time
+  (with its overall gain/loss). Green for up, red for down. Defaults to
+  `simulate=true` —
+  prices follow a geometric-random-walk so it runs offline. With
+  `simulate=false` it fetches live prices in a background thread (crypto from
+  CoinGecko, stocks from Yahoo Finance — both key-free) and falls back to the
+  simulated walk for any asset class whose fetch fails; `refresh_interval`
+  controls how often it refetches. Pass `symbols` (comma-separated) to limit
+  the universe. Every successful live pull is cached to
+  `data/ticker_cache.json` (git-ignored); the next run **seeds from that cache**
+  so a rate-limited start opens on the most recent real prices rather than the
+  hardcoded seeds. The cache is **cumulative** — each symbol's newest fetched
+  price is merged in and stale ones are kept, so prices fill in across refreshes
+  and runs even when an individual request is throttled. Stocks are fetched
+  batch-first, then gently per-symbol (never a parallel burst, which is what
+  trips rate limiting). The bottom label shows the data source — `[LIVE]`,
+  `[CACHED 5m ago]`, or `[SIMULATED]`.
+
+### Network & security (aesthetic)
+
+Hacker-movie-style visualizers. Several can read **real** data from the local
+machine — your own open connections, the LAN's ARP table, nearby Wi-Fi /
+Bluetooth — but they never touch anything remote: the one real scanner
+(`port_scanner`) is self-scoped to localhost and your own gateway, and the
+rest are read-only observers or pure animation. Modules that read real data
+take a **`simulate`** flag; set `"simulate": true` to force the animated
+fake-data mode instead (the right choice on a headless box, when the
+underlying CLI tools aren't installed, or when you just want the look without
+touching the system). See the platform notes below for which CLI tools each
+one uses on Linux vs. macOS.
+
+- **`connections`** — arc diagram of your host's active network connections
+  (read via `lsof` / `netstat`). Remote endpoints sit around a ring with arcs
+  whose brightness fades as connections go idle. Honors `simulate`.
+- **`packet_sniffer`** — `tcpdump`-style scrolling packet log. Observes your
+  real local connection endpoints and animates plausible packet
+  timing/flags/hexdumps around them — it does **not** capture payloads.
+  Honors `simulate`.
+- **`netmap`** — LAN host map built from the ARP table (`arp` / `ip neigh`).
+  Discovered hosts arrange around the router with MAC/vendor guesses. Honors
+  `simulate`.
+- **`port_scanner`** — a **real** TCP-connect port scan, deliberately
+  restricted to `127.0.0.1` and the detected LAN gateway (any public target
+  falls back to localhost). Ports are colored open / closed / filtered as it
+  sweeps. `target` must be localhost or a private-range address.
+- **`nmap_replay`** — a simulated `nmap` run: hosts come up, ports resolve to
+  open/filtered/closed, and service/version lines plus mock findings scroll
+  by. Pure animation — no network access.
+- **`wifi_scan`** — nearby Wi-Fi access points as a signal-strength view.
+  Real scan via `nmcli` (Linux) or `system_profiler` (macOS) where available,
+  otherwise simulated SSIDs; RSSI bars colored by strength. Honors `simulate`.
+- **`bluetooth_scan`** — nearby Bluetooth devices on a radar-style sweep,
+  distance mapped from RSSI. Real via `bluetoothctl` (Linux) or
+  `system_profiler` (macOS) where available, else simulated. Honors
+  `simulate`.
+- **`decryption`** — a fake "brute-forcing the key" animation: a hex key
+  locks in digit by digit with status chatter. Pure eye candy.
+- **`matrix_breach`** — a multi-phase hacker montage (matrix rain → node scan
+  → exploit chatter → privilege escalation → covering tracks). Pure
+  animation.
+- **`worldmap_attack`** — an ASCII world map with attack arcs launching
+  between geographic points, in the style of a live "cyber threat map". Pure
+  animation.
 
 ### Utility
 
@@ -353,7 +602,9 @@ I have not include most of the data I am using here, this is because I do not kn
 
 | Config | Contents |
 |---|---|
-| `test1.json` | Master config — every module enabled |
+| `test1.json` | Master config — all 80 modules enabled |
+| `new.json` | The 20 newest modules (cellular automata, fractals, 3D) |
+| `orph.json` | Network / security-themed modules |
 | `visual.json` | Pure visual effects only |
 | `algorithms.json` | Algorithmic / search / fractal modules |
 | `science.json` | Physics, biology, dynamics, math |
@@ -458,7 +709,7 @@ cool_code_vis/
 ├── requirements.txt
 ├── modules/                         # one file per visualizer
 │   ├── _quit_helper.py              # shared cbreak-stdin polling utility
-│   └── …                            # 48 visualization modules
+│   └── …                            # 80 visualization modules
 ├── data/
 │   ├── configs/                     # JSON configs
 │   ├── meshes/                      # .obj files used by the 3D visualizers

@@ -1,0 +1,14 @@
+  {
+    "iterations": 0,
+    "scheduler": {
+        "no_repeat_window": 3,
+        "recency_boost": 0.25
+    },
+  "stock_crypto_ticker": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.12,
+        "simulate": true,
+        "refresh_interval": 15.0
+    }
+}

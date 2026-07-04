@@ -215,3 +215,5 @@ __marimo__/
 #data files (not configs)
 data/meshes/
 data/text/
+data/run_history.json
+data/ticker_cache.json

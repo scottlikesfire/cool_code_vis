@@ -1,0 +1,181 @@
+{
+    "iterations": 0,
+    "scheduler": {
+        "no_repeat_window": 3,
+        "recency_boost": 0.25
+    },
+    "falling_sand": {
+        "enabled": true,
+        "duration": 28,
+        "frame_delay": 0.04,
+        "spawn_rate": 3,
+        "fill_limit": 0.7,
+        "after": {"sandpile": 3.0}
+    },
+    "langtons_ant": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "num_ants": 3,
+        "rule": "random",
+        "steps_per_frame": 120
+    },
+    "sandpile": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "grains_per_frame": 8,
+        "topple_iters_per_frame": 60
+    },
+    "slime_mold": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "num_agents": 4000,
+        "sensor_angle": 0.45,
+        "sensor_dist": 6.0,
+        "turn_speed": 0.35,
+        "decay": 0.9,
+        "deposit": 1.0
+    },
+    "cyclic_ca": {
+        "enabled": true,
+        "duration": 28,
+        "frame_delay": 0.06,
+        "num_states": 12,
+        "threshold": 1,
+        "moore": false
+    },
+    "wireworld": {
+        "enabled": true,
+        "duration": 28,
+        "frame_delay": 0.08,
+        "generations_per_frame": 1
+    },
+    "percolation": {
+        "enabled": true,
+        "duration": 28,
+        "frame_delay": 0.04,
+        "p_start": 0.35,
+        "p_end": 0.75,
+        "sweep_time": 12.0,
+        "completion_pause": 1.5
+    },
+    "chladni": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "max_mode": 7,
+        "morph_time": 2.5,
+        "hold_time": 2.0
+    },
+    "bifurcation": {
+        "enabled": true,
+        "duration": 28,
+        "frame_delay": 0.03,
+        "r_min": 2.8,
+        "r_max": 4.0,
+        "cols_per_frame": 2,
+        "samples": 300
+    },
+    "chaos_game": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.03,
+        "points_per_frame": 2000,
+        "switch_time": 8
+    },
+    "strange_attractors": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "batch": 2000,
+        "iters_per_frame": 3,
+        "drift": 0.15,
+        "switch_time": 10.0,
+        "after": {"chaos_game": 4.0}
+    },
+    "galton_board": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.04,
+        "rows": 10,
+        "ball_rate": 3,
+        "fall_speed": 14.0
+    },
+    "metaballs": {
+        "enabled": true,
+        "duration": 25,
+        "frame_delay": 0.04,
+        "num_blobs": 5,
+        "threshold": 1.0
+    },
+    "spirograph": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.03,
+        "speed": 2.5,
+        "trail_len": 1200,
+        "hold_time": 2.0
+    },
+    "space_filling": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.02,
+        "segments_per_frame": 20,
+        "curve": "both",
+        "pause_time": 1.5
+    },
+    "ant_colony": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.06,
+        "num_cities": 18,
+        "num_ants": 24,
+        "alpha": 1.0,
+        "beta": 3.0,
+        "evaporation": 0.45
+    },
+    "snake_ai": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.05,
+        "min_delay": 0.02
+    },
+    "turing_machine": {
+        "enabled": true,
+        "duration": 30,
+        "step_delay": 0.05,
+        "completion_pause": 2.5
+    },
+    "terrain_flyover": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.05,
+        "speed": 18.0,
+        "camera_height": 30.0,
+        "height_scale": 38.0,
+        "view_distance": 80,
+        "after": {"raymarch_sdf": 3.0}
+    },
+    "raymarch_sdf": {
+        "enabled": true,
+        "duration": 30,
+        "frame_delay": 0.05,
+        "morph_time": 4.0,
+        "hold_time": 2.0,
+        "march_steps": 56,
+        "after": {"metaballs": 3.0}
+    },
+    "window_spawner": {
+        "enabled": true,
+        "weight": 0.4,
+        "num_windows": 2,
+        "runs_per_window": 2,
+        "child_duration": 12,
+        "subset_size": 3,
+        "pool": ["metaballs", "cyclic_ca", "chaos_game", "strange_attractors",
+                 "spirograph", "chladni", "terrain_flyover", "raymarch_sdf",
+                 "slime_mold", "sandpile"]
+    }
+}
