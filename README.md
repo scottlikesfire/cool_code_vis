@@ -617,6 +617,33 @@ Make a new config by copying one of these and toggling `enabled` flags or
 tweaking parameters. Every module's `main()` signature is the source of truth
 for what params it accepts.
 
+### Config web UI
+
+`config_ui/` is a stdlib-only web editor for the configs — no new
+dependencies, works offline:
+
+```bash
+python config_ui/server.py            # http://<host>:8765
+python config_ui/server.py --port 9000 --bind 127.0.0.1
+```
+
+It lists every config in `data/configs/`, renders each module as a card
+(enable toggle, weight, typed param inputs), offers each module's `main()`
+kwarg defaults as one-click addable params (discovered via `ast`, nothing is
+imported), and has a raw-JSON mode for anything the form can't express.
+
+**save** writes the JSON back; **save as…** creates a new config; **save +
+apply to display** additionally writes the chosen config's name to
+`data/active_config` (git-ignored) and restarts the tmux session `vis` with
+it. `start_vis.sh` — the boot/launcher script — reads `data/active_config`
+too, so the applied config also becomes the boot config. On a machine that
+isn't running the visualizer in tmux, apply degrades to just setting the
+boot config.
+
+There is no authentication: it binds `0.0.0.0` by default so you can
+configure a display box from a phone on the same network. Bind `127.0.0.1`
+if the machine sits on a network you don't trust.
+
 ---
 
 ## Mesh library

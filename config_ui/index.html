@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>cool_code_vis // config</title>
+<style>
+  :root {
+    --bg: #070a12; --panel: #0d1220; --panel2: #111a2e; --line: #1b2b45;
+    --text: #c9d7ee; --dim: #6b7f9e;
+    --cyan: #00e5ff; --magenta: #ff2fd6; --green: #39ff8e; --amber: #ffc857;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 14px/1.5 "SF Mono", "Cascadia Mono", "Fira Mono", Menlo, Consolas, monospace;
+    background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.015) 0 1px, transparent 1px 4px);
+  }
+  header {
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    padding: 18px 22px 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  header h1 { margin: 0; font-size: 18px; letter-spacing: 2px; color: var(--cyan);
+              text-shadow: 0 0 12px rgba(0,229,255,.6); }
+  header h1 span { color: var(--magenta); text-shadow: 0 0 12px rgba(255,47,214,.6); }
+  header .sub { color: var(--dim); font-size: 12px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 16px 22px 60px; }
+
+  .bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 14px 0 18px; }
+  select, input[type=text], input[type=number], textarea {
+    background: var(--panel2); color: var(--text); border: 1px solid var(--line);
+    border-radius: 6px; padding: 6px 9px; font: inherit;
+  }
+  input[type=number] { width: 90px; }
+  select:focus, input:focus, textarea:focus { outline: none; border-color: var(--cyan); }
+  button {
+    background: var(--panel2); color: var(--cyan); border: 1px solid var(--cyan);
+    border-radius: 6px; padding: 6px 14px; font: inherit; cursor: pointer;
+    transition: box-shadow .15s;
+  }
+  button:hover { box-shadow: 0 0 10px rgba(0,229,255,.45); }
+  button.magenta { color: var(--magenta); border-color: var(--magenta); }
+  button.magenta:hover { box-shadow: 0 0 10px rgba(255,47,214,.45); }
+  button.ghost { color: var(--dim); border-color: var(--line); }
+  button.ghost:hover { box-shadow: none; border-color: var(--dim); }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    margin-bottom: 10px; overflow: hidden;
+  }
+  .card > .head {
+    display: flex; align-items: center; gap: 12px; padding: 9px 14px; cursor: pointer;
+  }
+  .card > .head:hover { background: var(--panel2); }
+  .card .name { flex: 1; font-weight: bold; }
+  .card.enabled .name { color: var(--green); }
+  .card:not(.enabled) .name { color: var(--dim); }
+  .card .meta { color: var(--dim); font-size: 12px; }
+  .body { border-top: 1px solid var(--line); padding: 12px 14px; display: none; }
+  .card.open .body { display: block; }
+
+  .toggle { position: relative; width: 38px; height: 20px; flex: none; }
+  .toggle input { display: none; }
+  .toggle i {
+    position: absolute; inset: 0; border-radius: 20px; background: var(--panel2);
+    border: 1px solid var(--line); transition: .15s;
+  }
+  .toggle i::after {
+    content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px;
+    border-radius: 50%; background: var(--dim); transition: .15s;
+  }
+  .toggle input:checked + i { border-color: var(--green); background: rgba(57,255,142,.12); }
+  .toggle input:checked + i::after { left: 20px; background: var(--green);
+                                     box-shadow: 0 0 8px rgba(57,255,142,.8); }
+
+  table.params { width: 100%; border-collapse: collapse; }
+  table.params td { padding: 3px 8px 3px 0; vertical-align: top; }
+  table.params td.key { color: var(--amber); width: 200px; }
+  table.params textarea { width: 100%; min-height: 34px; resize: vertical; }
+  .row { display: flex; gap: 8px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+  .x { color: var(--magenta); cursor: pointer; padding: 0 6px; user-select: none; }
+  .x:hover { text-shadow: 0 0 8px rgba(255,47,214,.8); }
+
+  #globals .body { display: block; }
+  #globals .head { cursor: default; }
+  #globals .name { color: var(--cyan); }
+
+  #toast {
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    background: var(--panel2); border: 1px solid var(--cyan); color: var(--cyan);
+    padding: 9px 18px; border-radius: 8px; opacity: 0; pointer-events: none;
+    transition: opacity .25s; max-width: 90vw; box-shadow: 0 0 18px rgba(0,229,255,.3);
+  }
+  #toast.err { border-color: var(--magenta); color: var(--magenta);
+               box-shadow: 0 0 18px rgba(255,47,214,.3); }
+  #toast.show { opacity: 1; }
+  #raw { display: none; }
+  body.rawmode #cards, body.rawmode #addbar { display: none; }
+  body.rawmode #raw { display: block; }
+  #rawtext { width: 100%; min-height: 60vh; }
+  .pill { font-size: 11px; border: 1px solid var(--line); border-radius: 20px;
+          padding: 1px 9px; color: var(--dim); }
+  .pill.active { border-color: var(--green); color: var(--green); }
+</style>
+</head>
+<body>
+<header>
+  <h1>COOL_CODE_VIS <span>// CONFIG</span></h1>
+  <div class="sub">click a module to expand &middot; apply restarts the display</div>
+</header>
+<main>
+  <div class="bar">
+    <select id="configSel"></select>
+    <span id="activePill" class="pill">boot config</span>
+    <button id="saveBtn">save</button>
+    <button id="saveAsBtn" class="ghost">save as&hellip;</button>
+    <button id="applyBtn" class="magenta">save + apply to display</button>
+    <button id="rawBtn" class="ghost">raw json</button>
+  </div>
+
+  <div class="card" id="globals">
+    <div class="head"><span class="name">harness</span></div>
+    <div class="body">
+      <table class="params" id="globalParams"></table>
+    </div>
+  </div>
+
+  <div id="cards"></div>
+
+  <div class="bar" id="addbar">
+    <select id="addSel"></select>
+    <button id="addBtn">+ add module</button>
+    <span style="flex:1"></span>
+    <button id="allOn" class="ghost">enable all</button>
+    <button id="allOff" class="ghost">disable all</button>
+  </div>
+
+  <div id="raw">
+    <textarea id="rawtext" spellcheck="false"></textarea>
+    <div class="bar"><button id="rawApply">apply raw json to form</button></div>
+  </div>
+</main>
+<div id="toast"></div>
+
+<script>
+"use strict";
+let state = { configs: [], modules: [], active: "" };
+let cfg = {};            // the config being edited
+let current = "";        // its filename
+const RESERVED = new Set(["iterations", "scheduler"]);
+const SCHED_KEYS = { no_repeat_window: 1, recency_boost: 0, track_history: true,
+                     history_file: "data/run_history.json" };
+const $ = (id) => document.getElementById(id);
+
+function toast(msg, err) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.className = "show" + (err ? " err" : "");
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.className = "", 3500);
+}
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.error || r.statusText);
+  return body;
+}
+
+/* ---------- value <-> input ---------- */
+function inputFor(value, onChange) {
+  if (typeof value === "boolean") {
+    const l = document.createElement("label");
+    l.className = "toggle";
+    l.innerHTML = '<input type="checkbox"><i></i>';
+    l.firstChild.checked = value;
+    l.firstChild.onchange = (e) => onChange(e.target.checked);
+    return l;
+  }
+  if (typeof value === "number") {
+    const i = document.createElement("input");
+    i.type = "number"; i.step = "any"; i.value = value;
+    i.onchange = () => onChange(i.value === "" ? 0 : Number(i.value));
+    return i;
+  }
+  if (typeof value === "string") {
+    const i = document.createElement("input");
+    i.type = "text"; i.value = value; i.size = Math.max(14, value.length + 2);
+    i.onchange = () => onChange(i.value);
+    return i;
+  }
+  const t = document.createElement("textarea");   // arrays / objects / null
+  t.value = JSON.stringify(value);
+  t.onchange = () => {
+    try { onChange(JSON.parse(t.value)); t.style.borderColor = ""; }
+    catch { t.style.borderColor = "var(--magenta)"; toast("bad JSON in param", true); }
+  };
+  return t;
+}
+
+function paramRow(table, obj, key, removable) {
+  const tr = table.insertRow();
+  tr.insertCell().className = "key";
+  tr.cells[0].textContent = key;
+  tr.insertCell().appendChild(inputFor(obj[key], (v) => { obj[key] = v; }));
+  const c = tr.insertCell();
+  if (removable) {
+    const x = document.createElement("span");
+    x.className = "x"; x.textContent = "✕"; x.title = "remove";
+    x.onclick = () => { delete obj[key]; tr.remove(); };
+    c.appendChild(x);
+  }
+}
+
+/* ---------- rendering ---------- */
+function renderGlobals() {
+  const table = $("globalParams");
+  table.innerHTML = "";
+  if (!("iterations" in cfg)) cfg.iterations = 0;
+  paramRow(table, cfg, "iterations", false);
+  if (!cfg.scheduler) cfg.scheduler = {};
+  for (const k of Object.keys(SCHED_KEYS)) {
+    if (!(k in cfg.scheduler)) cfg.scheduler[k] = SCHED_KEYS[k];
+    paramRow(table, cfg.scheduler, k, false);
+  }
+}
+
+function moduleCard(name) {
+  const m = cfg[name];
+  const card = document.createElement("div");
+  card.className = "card" + (m.enabled ? " enabled" : "");
+  const head = document.createElement("div");
+  head.className = "head";
+
+  const tog = inputFor(!!m.enabled, (v) => {
+    m.enabled = v;
+    card.classList.toggle("enabled", v);
+  });
+  tog.onclick = (e) => e.stopPropagation();
+  const nm = document.createElement("span");
+  nm.className = "name"; nm.textContent = name;
+  const meta = document.createElement("span");
+  meta.className = "meta";
+  meta.textContent = Object.keys(m).filter(k => k !== "enabled").length + " params";
+  head.append(tog, nm, meta);
+  head.onclick = () => card.classList.toggle("open");
+
+  const body = document.createElement("div");
+  body.className = "body";
+  const table = document.createElement("table");
+  table.className = "params";
+  for (const k of Object.keys(m)) {
+    if (k !== "enabled") paramRow(table, m, k, true);
+  }
+  const row = document.createElement("div");
+  row.className = "row";
+  const paramSel = document.createElement("select");
+  paramSel.innerHTML = "<option>loading…</option>";
+  api("/api/params?module=" + name).then(defs => {
+    paramSel.innerHTML = "";
+    const opts = Object.keys(defs).filter(k => !(k in m));
+    for (const k of [...opts, "(custom key)"]) {
+      const o = document.createElement("option");
+      o.value = k; o.textContent = k === "(custom key)" ? k :
+        k + " = " + JSON.stringify(defs[k]);
+      paramSel.appendChild(o);
+    }
+    paramSel._defs = defs;
+  }).catch(() => { paramSel.innerHTML = "<option>(custom key)</option>"; });
+  const addP = document.createElement("button");
+  addP.className = "ghost"; addP.textContent = "+ param";
+  addP.onclick = () => {
+    let k = paramSel.value;
+    const defs = paramSel._defs || {};
+    if (k === "(custom key)" || !k) {
+      k = prompt("param name:");
+      if (!k) return;
+    }
+    if (k in m) return;
+    m[k] = (k in defs && defs[k] !== null) ? defs[k] : 0;
+    paramRow(table, m, k, true);
+    [...paramSel.options].forEach(o => { if (o.value === k) o.remove(); });
+  };
+  const rm = document.createElement("button");
+  rm.className = "ghost"; rm.textContent = "remove module";
+  rm.onclick = () => { delete cfg[name]; card.remove(); refreshAddSel(); };
+  row.append(paramSel, addP, rm);
+  body.append(table, row);
+  card.append(head, body);
+  return card;
+}
+
+function renderCards() {
+  const wrap = $("cards");
+  wrap.innerHTML = "";
+  for (const name of Object.keys(cfg)) {
+    if (RESERVED.has(name)) continue;
+    wrap.appendChild(moduleCard(name));
+  }
+  refreshAddSel();
+}
+
+function refreshAddSel() {
+  const sel = $("addSel");
+  sel.innerHTML = "";
+  for (const m of state.modules) {
+    if (m in cfg) continue;
+    const o = document.createElement("option");
+    o.value = o.textContent = m;
+    sel.appendChild(o);
+  }
+}
+
+function render() {
+  $("activePill").textContent = current === state.active ?
+    "boot config ✓" : "boot: " + state.active;
+  $("activePill").className = "pill" + (current === state.active ? " active" : "");
+  renderGlobals();
+  renderCards();
+  $("rawtext").value = JSON.stringify(cfg, null, 4);
+}
+
+/* ---------- actions ---------- */
+async function loadConfig(name) {
+  cfg = await api("/api/config?name=" + encodeURIComponent(name));
+  current = name;
+  render();
+}
+
+async function save(name) {
+  await api("/api/config?name=" + encodeURIComponent(name),
+            { method: "POST", body: JSON.stringify(cfg) });
+  if (!state.configs.includes(name)) {
+    state.configs.push(name); state.configs.sort();
+    rebuildConfigSel(name);
+  }
+  current = name;
+  toast("saved " + name);
+}
+
+function rebuildConfigSel(selected) {
+  const sel = $("configSel");
+  sel.innerHTML = "";
+  for (const c of state.configs) {
+    const o = document.createElement("option");
+    o.value = o.textContent = c;
+    sel.appendChild(o);
+  }
+  sel.value = selected;
+}
+
+$("configSel").onchange = (e) => loadConfig(e.target.value).catch(err => toast(err.message, true));
+$("saveBtn").onclick = () => save(current).catch(err => toast(err.message, true));
+$("saveAsBtn").onclick = () => {
+  let name = prompt("save as (e.g. my_setup.json):", current);
+  if (!name) return;
+  if (!name.endsWith(".json")) name += ".json";
+  save(name).then(() => { rebuildConfigSel(name); render(); })
+            .catch(err => toast(err.message, true));
+};
+$("applyBtn").onclick = async () => {
+  try {
+    await save(current);
+    const r = await api("/api/apply?name=" + encodeURIComponent(current), { method: "POST" });
+    state.active = current;
+    render();
+    toast(r.message, !r.ok);
+  } catch (err) { toast(err.message, true); }
+};
+$("addBtn").onclick = async () => {
+  const name = $("addSel").value;
+  if (!name) return;
+  let defs = {};
+  try { defs = await api("/api/params?module=" + name); } catch {}
+  const m = { enabled: true };
+  if ("duration" in defs && defs.duration !== null) m.duration = defs.duration;
+  cfg[name] = m;
+  $("cards").appendChild(moduleCard(name));
+  refreshAddSel();
+};
+$("allOn").onclick = () => { setAll(true); };
+$("allOff").onclick = () => { setAll(false); };
+function setAll(v) {
+  for (const k of Object.keys(cfg)) if (!RESERVED.has(k)) cfg[k].enabled = v;
+  renderCards();
+}
+$("rawBtn").onclick = () => {
+  $("rawtext").value = JSON.stringify(cfg, null, 4);
+  document.body.classList.toggle("rawmode");
+  $("rawBtn").textContent = document.body.classList.contains("rawmode") ? "form view" : "raw json";
+};
+$("rawApply").onclick = () => {
+  try {
+    cfg = JSON.parse($("rawtext").value);
+    document.body.classList.remove("rawmode");
+    $("rawBtn").textContent = "raw json";
+    render();
+  } catch (err) { toast("bad JSON: " + err.message, true); }
+};
+
+(async () => {
+  try {
+    state = await api("/api/state");
+    rebuildConfigSel(state.active);
+    await loadConfig(state.active);
+  } catch (err) { toast(err.message, true); }
+})();
+</script>
+</body>
+</html>
