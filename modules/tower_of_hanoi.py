@@ -94,6 +94,13 @@ def draw(stdscr, pegs, num_disks, current_move, history, move_count, total_moves
         except curses.error:
             pass
 
+    # The puzzle owns its rows first; the history log gets what's left above
+    # it (never fewer than the 3 peg-state lines it sits beside).
+    base_y = max_y - 3
+    peg_height = num_disks + 2
+    puzzle_top = base_y - peg_height
+    history_lines = max(3, min(history_lines, puzzle_top - 6))
+
     # Move history
     try:
         stdscr.addstr(4, 4, "Recent moves:",
@@ -157,12 +164,9 @@ def draw(stdscr, pegs, num_disks, current_move, history, move_count, total_moves
     margin = max(0, (max_x - total_width) // 2)
     peg_centers = [margin + max_disk_width // 2 + 3 + p * peg_spacing for p in range(3)]
 
-    base_y = max_y - 3
-    peg_height = num_disks + 2
-    puzzle_top = base_y - peg_height
-
-    # Bottom of the readout area
-    readout_bottom = 5 + max(history_lines, 3)
+    # Bottom of the readout area (history_lines was already clamped above so
+    # this only trips when the screen is too short for even the minimal layout)
+    readout_bottom = 5 + history_lines
     if puzzle_top <= readout_bottom:
         stdscr.refresh()
         return
