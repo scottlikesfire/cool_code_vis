@@ -27,7 +27,7 @@ def init_colors():
 
 
 def run(stdscr, duration, frame_delay, num_pairs, twist_speed, radius,
-        bp_per_turn, helix_height):
+        bp_per_turn):
     init_colors()
     try:
         curses.curs_set(0)
@@ -144,17 +144,16 @@ def run(stdscr, duration, frame_delay, num_pairs, twist_speed, radius,
 
 
 def main(duration=25, frame_delay=0.05, num_pairs=20, twist_speed=0.6,
-         radius=4.0, bp_per_turn=10, helix_height=20):
+         radius=4.0, bp_per_turn=10):
     duration = float(duration)
     frame_delay = float(frame_delay)
     num_pairs = max(2, int(num_pairs))
     twist_speed = float(twist_speed)
     radius = float(radius)
     bp_per_turn = max(1, int(bp_per_turn))
-    helix_height = max(2, int(helix_height))
     curses.wrapper(lambda stdscr: run(
         stdscr, duration, frame_delay, num_pairs, twist_speed, radius,
-        bp_per_turn, helix_height))
+        bp_per_turn))
 
 
 if __name__ == "__main__":

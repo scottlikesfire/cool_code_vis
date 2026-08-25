@@ -132,7 +132,6 @@
     "bp_per_turn": "base pairs per full 360-degree twist (min 1; 10 = B-DNA-like)",
     "duration": "seconds to run before exiting the visualization loop",
     "frame_delay": "seconds between frames (lower = faster animation)",
-    "helix_height": "accepted and validated (min 2) but never used by the render loop",
     "num_pairs": "base pairs in the random sequence, one column each (min 2)",
     "radius": "strand distance from the center axis in rows (helix visual thickness)",
     "twist_speed": "helix rotation rate in radians/sec"

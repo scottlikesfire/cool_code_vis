@@ -37,8 +37,7 @@
         "num_pairs": 20,
         "twist_speed": 0.6,
         "radius": 20.0,
-        "bp_per_turn": 10,
-        "helix_height": 20
+        "bp_per_turn": 10
     },
     "lorenz_attractor": {
         "enabled": false,

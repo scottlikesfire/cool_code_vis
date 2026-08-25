@@ -632,7 +632,11 @@ It lists every config in `data/configs/`, renders each module as a card
 kwarg defaults as one-click addable params (discovered via `ast`, nothing is
 imported), and has a raw-JSON mode for anything the form can't express.
 
-**save** writes the JSON back; **save as…** creates a new config; **save +
+**save** writes the JSON back; **save as…** copies to a new config; **new…**
+creates a blank config; **set as boot config** makes the current config the
+one `start_vis.sh` launches at boot without touching the running display;
+**restore defaults** strips every module's param overrides so they run on
+their `main()` defaults (kept only when you save); **save +
 apply to display** additionally writes the chosen config's name to
 `data/active_config` (git-ignored) and restarts the tmux session `vis` with
 it. `start_vis.sh` — the boot/launcher script — reads `data/active_config`

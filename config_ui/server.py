@@ -12,6 +12,8 @@ including offline. Serves a single-page editor plus a small JSON API:
     POST /api/apply?name=X      restart the tmux "vis" session with config X
                                 and remember it in data/active_config so it
                                 survives reboots (start_vis.sh reads it)
+    POST /api/boot?name=X       set config X as the boot config only, without
+                                touching the running display
 
 Run:  python config_ui/server.py [--port 8765] [--bind 0.0.0.0]
 
@@ -171,6 +173,11 @@ class Handler(BaseHTTPRequestHandler):
             except subprocess.CalledProcessError as exc:
                 return self._error(500, f"tmux respawn failed: {exc}")
             self._send(200, {"ok": ok, "message": msg})
+        elif url.path == "/api/boot":
+            if not path.exists():
+                return self._error(404, "no such config")
+            ACTIVE_FILE.write_text(name + "\n")
+            self._send(200, {"ok": True, "message": f"{name} will run at boot"})
         else:
             self._error(404, "not found")
 

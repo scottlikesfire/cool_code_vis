@@ -117,7 +117,10 @@
     <span id="activePill" class="pill">boot config</span>
     <button id="saveBtn">save</button>
     <button id="saveAsBtn" class="ghost">save as&hellip;</button>
+    <button id="newBtn" class="ghost">new&hellip;</button>
+    <button id="bootBtn">set as boot config</button>
     <button id="applyBtn" class="magenta">save + apply to display</button>
+    <button id="restoreBtn" class="ghost">restore defaults</button>
     <button id="rawBtn" class="ghost">raw json</button>
   </div>
 
@@ -371,6 +374,37 @@ $("saveAsBtn").onclick = () => {
   if (!name.endsWith(".json")) name += ".json";
   save(name).then(() => { rebuildConfigSel(name); render(); })
             .catch(err => toast(err.message, true));
+};
+$("newBtn").onclick = () => {
+  let name = prompt("new config name (e.g. my_setup.json):");
+  if (!name) return;
+  if (!name.endsWith(".json")) name += ".json";
+  if (state.configs.includes(name)) return toast(name + " already exists", true);
+  cfg = { iterations: 0, scheduler: { ...SCHED_KEYS } };
+  current = name;
+  save(name).then(() => { rebuildConfigSel(name); render(); })
+            .catch(err => toast(err.message, true));
+};
+$("bootBtn").onclick = async () => {
+  try {
+    await save(current);
+    const r = await api("/api/boot?name=" + encodeURIComponent(current), { method: "POST" });
+    state.active = current;
+    render();
+    toast(r.message);
+  } catch (err) { toast(err.message, true); }
+};
+$("restoreBtn").onclick = () => {
+  if (!confirm("Reset harness settings and strip every module's params back to " +
+               "code defaults? Nothing is written until you hit save.")) return;
+  const next = { iterations: 0, scheduler: { ...SCHED_KEYS } };
+  for (const k of Object.keys(cfg)) {
+    if (RESERVED.has(k)) continue;
+    next[k] = { enabled: !!cfg[k].enabled };
+  }
+  cfg = next;
+  render();
+  toast("params reset to code defaults — hit save to keep");
 };
 $("applyBtn").onclick = async () => {
   try {
