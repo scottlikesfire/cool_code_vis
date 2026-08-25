@@ -1,0 +1,12 @@
+{
+    "iterations": 0,
+    "window_spawner": {
+        "enabled": true,
+        "duration": 120,
+        "frame_delay": 0.25,
+        "num_windows": 4,
+        "runs_per_window": 3,
+        "child_duration": 12,
+        "subset_size": 3
+    }
+}

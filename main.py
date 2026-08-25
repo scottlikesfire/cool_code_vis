@@ -250,7 +250,7 @@ def pick_module(enabled_modules, session_recent, scheduler_cfg):
 def print_usage():
     print("Usage: python main.py <config_file>")
     print()
-    print("  config_file  Name of a JSON file in data/configs/ (e.g. test1.json)")
+    print("  config_file  Name of a JSON file in data/configs/ (e.g. default.json)")
 
 
 def clear_terminal():

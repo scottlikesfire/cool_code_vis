@@ -76,7 +76,9 @@
 
   table.params { width: 100%; border-collapse: collapse; }
   table.params td { padding: 3px 8px 3px 0; vertical-align: top; }
-  table.params td.key { color: var(--amber); width: 200px; }
+  table.params td.key { color: var(--amber); width: 240px; }
+  .desc { color: var(--dim); font-size: 11px; line-height: 1.35; margin-top: 1px;
+          max-width: 230px; }
   table.params textarea { width: 100%; min-height: 34px; resize: vertical; }
   .row { display: flex; gap: 8px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
   .x { color: var(--magenta); cursor: pointer; padding: 0 6px; user-select: none; }
@@ -148,6 +150,9 @@
 let state = { configs: [], modules: [], active: "" };
 let cfg = {};            // the config being edited
 let current = "";        // its filename
+let docs = {};           // param descriptions from /api/docs
+const descFor = (mod, key) =>
+  (docs[mod] || {})[key] || (docs._module_common || {})[key] || "";
 const RESERVED = new Set(["iterations", "scheduler"]);
 const SCHED_KEYS = { no_repeat_window: 1, recency_boost: 0, track_history: true,
                      history_file: "data/run_history.json" };
@@ -199,10 +204,16 @@ function inputFor(value, onChange) {
   return t;
 }
 
-function paramRow(table, obj, key, removable) {
+function paramRow(table, obj, key, removable, desc) {
   const tr = table.insertRow();
   tr.insertCell().className = "key";
   tr.cells[0].textContent = key;
+  if (desc) {
+    const d = document.createElement("div");
+    d.className = "desc";
+    d.textContent = desc;
+    tr.cells[0].appendChild(d);
+  }
   tr.insertCell().appendChild(inputFor(obj[key], (v) => { obj[key] = v; }));
   const c = tr.insertCell();
   if (removable) {
@@ -217,12 +228,13 @@ function paramRow(table, obj, key, removable) {
 function renderGlobals() {
   const table = $("globalParams");
   table.innerHTML = "";
+  const h = docs._harness || {};
   if (!("iterations" in cfg)) cfg.iterations = 0;
-  paramRow(table, cfg, "iterations", false);
+  paramRow(table, cfg, "iterations", false, h.iterations);
   if (!cfg.scheduler) cfg.scheduler = {};
   for (const k of Object.keys(SCHED_KEYS)) {
     if (!(k in cfg.scheduler)) cfg.scheduler[k] = SCHED_KEYS[k];
-    paramRow(table, cfg.scheduler, k, false);
+    paramRow(table, cfg.scheduler, k, false, h[k]);
   }
 }
 
@@ -251,7 +263,7 @@ function moduleCard(name) {
   const table = document.createElement("table");
   table.className = "params";
   for (const k of Object.keys(m)) {
-    if (k !== "enabled") paramRow(table, m, k, true);
+    if (k !== "enabled") paramRow(table, m, k, true, descFor(name, k));
   }
   const row = document.createElement("div");
   row.className = "row";
@@ -264,6 +276,7 @@ function moduleCard(name) {
       const o = document.createElement("option");
       o.value = k; o.textContent = k === "(custom key)" ? k :
         k + " = " + JSON.stringify(defs[k]);
+      if (k !== "(custom key)") o.title = descFor(name, k);
       paramSel.appendChild(o);
     }
     paramSel._defs = defs;
@@ -279,7 +292,7 @@ function moduleCard(name) {
     }
     if (k in m) return;
     m[k] = (k in defs && defs[k] !== null) ? defs[k] : 0;
-    paramRow(table, m, k, true);
+    paramRow(table, m, k, true, descFor(name, k));
     [...paramSel.options].forEach(o => { if (o.value === k) o.remove(); });
   };
   const rm = document.createElement("button");
@@ -401,6 +414,7 @@ $("rawApply").onclick = () => {
 
 (async () => {
   try {
+    docs = await api("/api/docs").catch(() => ({}));
     state = await api("/api/state");
     rebuildConfigSel(state.active);
     await loadConfig(state.active);

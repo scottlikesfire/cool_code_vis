@@ -1,0 +1,605 @@
+{
+  "_harness": {
+    "history_file": "where run history is written (git-ignored)",
+    "iterations": "how many modules to run before exiting \u2014 0 = loop forever",
+    "no_repeat_window": "never repeat any of the last N modules (1 = just no back-to-back repeats)",
+    "recency_boost": "above 0 favors modules that haven't run in a while; 0 = pure weights",
+    "track_history": "append every run to the history file (for stats)"
+  },
+  "_module_common": {
+    "after": "predecessor \u2192 multiplier map, e.g. {\"fireworks\": 4.0} = 4x more likely right after fireworks",
+    "enabled": "include this module in the random rotation",
+    "weight": "selection weight \u2014 2.0 comes up twice as often as 1.0 (default 1.0)"
+  },
+  "ant_colony": {
+    "alpha": "pheromone influence exponent in ant choice p ~ tau^alpha * eta^beta",
+    "beta": "distance-heuristic influence exponent in ant choice (higher = greedier)",
+    "duration": "seconds to run before exiting the visualization loop",
+    "evaporation": "fraction of pheromone lost per iteration, clamped to 0..0.99 (rho)",
+    "frame_delay": "seconds between frames via input timeout (lower = faster animation)",
+    "num_ants": "ants building tours each ACO iteration (min 2)",
+    "num_cities": "number of random TSP cities scattered on screen (min 4)"
+  },
+  "bifurcation": {
+    "cols_per_frame": "terminal columns computed and drawn per frame (min 1, higher = faster sweep)",
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between frames (lower = faster drawing/zooming)",
+    "r_max": "right edge of the r range, clamped to <= 4.0",
+    "r_min": "left edge of the logistic-map r range, clamped to >= 0 (reset to 2.8 if r_max <= r_min)",
+    "samples": "attractor samples histogrammed per column (min 24, higher = denser detail)"
+  },
+  "bluetooth_scan": {
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between animation frames (sweep, RSSI jitter)",
+    "refresh_interval": "seconds between real/simulated device re-scans",
+    "simulate": "true = always use fake devices; false = try system_profiler/bluetoothctl first (accepts truthy strings)"
+  },
+  "boids": {
+    "align_w": "weight of the alignment force (match neighbors' velocity)",
+    "coh_w": "weight of the cohesion force (steer toward neighbors' center)",
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "max_speed": "speed cap in cells/sec; velocities are rescaled to this limit",
+    "neigh_dist": "distance (cells) within which boids count as neighbors for align/cohere",
+    "num_boids": "number of boids in the flock (min 2)",
+    "sep_dist": "distance (cells) under which boids push apart",
+    "sep_w": "weight of the separation force (avoid crowding)"
+  },
+  "bouncing_balls": {
+    "damping": "velocity multiplier on each wall bounce (<1 loses energy, 1 = perfectly elastic)",
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "gravity": "downward acceleration in cells/sec^2 added to vy each frame",
+    "num_balls": "number of bouncing balls (min 1)",
+    "trail_length": "positions kept per ball for the fading trail (0 = no trail)"
+  },
+  "bouncing_mesh": {
+    "angular_speed": "tumble rate in radians/sec around the spin axis",
+    "bounce_jitter": "random perturbation added to the spin axis on each wall bounce (0 = fixed axis)",
+    "box_x": "half-width of the bounce box in world x (grown to fit the mesh if too small)",
+    "box_y": "half-height of the bounce box in world y (grown to fit the mesh if too small)",
+    "box_z_max": "far z wall of the bounce box (depth of travel)",
+    "box_z_min": "near z wall of the bounce box (camera at z=0 looking down +z)",
+    "duration": "seconds to run before exiting the visualization loop",
+    "focal_factor": "focal length as a fraction of terminal height (higher = more zoomed/telephoto)",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "linear_speed": "translation speed in world units/sec along a random direction",
+    "mesh_file": ".obj path (or directory to pick a random .obj), relative to repo root; falls back to a cube",
+    "mesh_scale": "bounding-sphere radius after the mesh is normalized to unit size"
+  },
+  "cellular_automaton": {
+    "completion_pause": "seconds to keep the final frame on screen after duration ends",
+    "density": "probability 0..1 that each cell starts alive when (re)seeding",
+    "duration": "seconds to run before exiting (None = run forever)",
+    "step_delay": "seconds between Game of Life generations"
+  },
+  "chaos_game": {
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "points_per_frame": "IFS points iterated and deposited per frame (min 1, higher = faster fill)",
+    "switch_time": "seconds spent on each attractor before clearing and switching to the next"
+  },
+  "chladni": {
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "hold_time": "seconds to hold a finished pattern before morphing to the next",
+    "max_mode": "upper bound for random plate mode numbers m,n (min 2; higher = finer patterns)",
+    "morph_time": "seconds to crossfade between two mode patterns (min 0.1)"
+  },
+  "clock": {
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between frames (lower = smoother second hand and sparks)",
+    "scale": "block size of each big-digit pixel in cells (min 1; auto-shrinks to fit)",
+    "time_format": "\"12\" for 12-hour with AM/PM, \"24\" for 24-hour (anything else = \"24\")"
+  },
+  "connections": {
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between frames (arc pulse animation speed)",
+    "refresh_interval": "seconds between re-polling lsof/netstat (or the simulator) for connections",
+    "simulate": "true = always synthesize fake connections; false = read real ones, falling back to fake if none (accepts truthy strings)"
+  },
+  "cyclic_ca": {
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between CA steps (lower = faster animation)",
+    "moore": "true = 8-neighbor Moore neighborhood, false = 4-neighbor von Neumann (accepts truthy strings)",
+    "num_states": "cyclic states per cell (min 3); replaced by a random 8-16 on auto-reseed",
+    "threshold": "neighbors already in the successor state needed for a cell to advance (min 1)"
+  },
+  "decryption": {
+    "completion_pause": "seconds the ACCESS GRANTED banner stays up before new targets are generated",
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between frames (glyph churn and lock speed)",
+    "key_length": "characters in the AES key/hash targets (min 4); passphrase length is derived from it"
+  },
+  "directory_structure_visualizer": {
+    "duration": "seconds to keep the finished tree on screen after the reveal animation ends (None = stay until q/ESC)",
+    "expand_interval": "seconds between directory-expansion reveal steps of the animation",
+    "reverse": "true = flip the tree so the root is at the bottom and branches grow upward",
+    "target_path": "directory to render as a tree (None = current working directory); exits if not a directory"
+  },
+  "dla": {
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "kill_buffer": "cells beyond the bounding box where a wandering walker is killed (forced > spawn_buffer)",
+    "max_walker_steps": "random-walk steps before a walker is abandoned (min 100)",
+    "particles_per_color": "particles placed before the color cycles to the next palette entry (min 1)",
+    "seed_count": "number of scattered seed points when seed_mode=\"random\" (min 1; unused otherwise)",
+    "seed_mode": "initial cluster shape: \"center\" (single point), \"bottom\" (full bottom row), or \"random\" (scattered points)",
+    "spawn_buffer": "cells beyond the cluster bounding box where walkers spawn (min 1; smaller = faster sticking)",
+    "walkers_per_frame": "random walkers launched per frame (min 1, higher = faster growth)"
+  },
+  "dna_helix": {
+    "bp_per_turn": "base pairs per full 360-degree twist (min 1; 10 = B-DNA-like)",
+    "duration": "seconds to run before exiting the visualization loop",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "helix_height": "accepted and validated (min 2) but never used by the render loop",
+    "num_pairs": "base pairs in the random sequence, one column each (min 2)",
+    "radius": "strand distance from the center axis in rows (helix visual thickness)",
+    "twist_speed": "helix rotation rate in radians/sec"
+  },
+  "double_pendulum": {
+    "duration": "seconds to run before exiting back to the harness",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "g": "gravitational acceleration used by the integrator",
+    "l1": "length of the upper arm in world units",
+    "l2": "length of the lower arm in world units",
+    "m1": "mass of the upper bob in the pendulum equations",
+    "m2": "mass of the lower bob in the pendulum equations",
+    "scale": "world-to-screen zoom; cells per world unit (x doubled for char aspect)",
+    "sub_steps": "RK4 integration sub-steps per frame (higher = more stable, min 1)",
+    "trail_length": "max points kept in the end-bob trail (0 = no trail)"
+  },
+  "falling_sand": {
+    "duration": "seconds to run before exiting back to the harness",
+    "fill_limit": "movable-cell fraction of the grid (0.05-0.95) that triggers the dissolve phase",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "spawn_rate": "cells each emitter drops per frame (fire emits half this, min 1)"
+  },
+  "fire": {
+    "duration": "seconds to run before exiting back to the harness",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "intensity": "max random heat decay per cell as flames rise (higher = shorter, choppier flames)",
+    "spark_rate": "spark spawn attempts per frame, each with 50% chance (0 = no sparks)"
+  },
+  "fireworks": {
+    "duration": "seconds to run before exiting back to the harness",
+    "fall_count": "particles per full-gravity 'fall' burst",
+    "fall_speed": "(min, max) initial speed range for fall-burst particles (None = (45, 60))",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "gravity": "downward acceleration on particles in cells/sec^2",
+    "launch_rate": "average rocket launches per second (probability launch_rate*dt each frame)",
+    "multi_count": "seed particles per 'multi' burst that re-explode later",
+    "multi_fade_duration": "seconds secondary sparks stochastically fade from seed color to final color",
+    "multi_secondary_count": "sparks each multi seed emits when it re-explodes",
+    "multi_secondary_speed": "(min, max) speed range for secondary sparks after seeds re-explode (None = (70, 90))",
+    "multi_speed": "(min, max) initial speed range for multi-burst seeds (None = (30, 42))",
+    "ring_count": "evenly spaced particles per expanding 'ring' burst",
+    "ring_speed": "(min, max) range the ring's single expansion speed is drawn from (None = (50, 65))",
+    "simple_count": "particles per spherical 'simple' burst",
+    "simple_speed": "(min, max) initial speed range for simple-burst particles (None = (45, 65))",
+    "willow_count": "particles per slow drooping 'willow' burst",
+    "willow_speed": "(min, max) initial speed range for willow-burst particles (None = (25, 35))"
+  },
+  "fourier_epicycles": {
+    "duration": "seconds to run before exiting back to the harness",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "num_terms": "number of Fourier terms / chained circles in the epicycle stack (min 1)",
+    "omega": "base angular speed in radians/sec; each harmonic spins at freq*omega",
+    "scale": "cells per amplitude unit (auto-shrunk if the chain would leave the screen)",
+    "total_amplitude": "sum of |amplitudes| the terms are normalized to; sets the chain's overall size",
+    "wave_history": "number of tip samples kept in the scrolling wave plot (min 2)",
+    "wave_type": "waveform to synthesize: square, sawtooth, triangle, pulse, or random = pick one"
+  },
+  "galton_board": {
+    "ball_rate": "spawn interval in frames: one new ball every ball_rate frames (min 1)",
+    "duration": "seconds to run before exiting back to the harness",
+    "fall_speed": "ball fall speed in terminal cells per second",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "rows": "peg rows in the pyramid, giving rows+1 bins (min 2, capped to fit screen)"
+  },
+  "grapher": {
+    "duration": "seconds to hold the finished chart after animating (0 = no hold, exit immediately)",
+    "step_delay": "seconds paused after each point added while a series animates in"
+  },
+  "gray_scott": {
+    "color_choice": "palette index 1-6 for the field color, or random = pick one",
+    "dt": "forward-Euler timestep per simulation step (larger = faster but less stable)",
+    "duration": "seconds to run before exiting back to the harness",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "preset": "F/k parameter preset: spots, stripes, mazes, fingers, worms, ripples, or random = pick one",
+    "sub_steps": "simulation steps computed per rendered frame (higher = faster evolution, min 1)"
+  },
+  "hypercube": {
+    "angular_speeds": "list of up to 6 rotation speeds in rad/sec for planes xy,xz,xw,yz,yw,zw (0 = plane off, None = default mix)",
+    "distance": "how far the projected object sits in front of the 3D camera along z",
+    "distance_4d": "4D camera distance along w for the 4D-to-3D perspective divide (smaller = stronger inner/outer cube contrast)",
+    "duration": "seconds to run before exiting back to the harness",
+    "focal_factor": "pinhole focal length as a fraction of terminal height (larger = bigger on screen)",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "mesh_scale": "uniform scale applied to the 3D vertices after 4D projection"
+  },
+  "ising_model": {
+    "J": "spin coupling constant; scales the Metropolis energy change 2*J*s*neighbors",
+    "T_max": "high end of the sinusoidal temperature sweep",
+    "T_min": "low end of the sinusoidal temperature sweep",
+    "T_period": "seconds for one full temperature oscillation across the critical point",
+    "duration": "seconds to run before exiting back to the harness",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "sweeps_per_frame": "full Monte Carlo sweeps (rows*cols flip attempts each) per frame (min 1)"
+  },
+  "julia_set": {
+    "duration": "seconds to run before exiting back to the harness",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "max_iter": "escape-time iteration cap per pixel (higher = more detail, slower frames)",
+    "morph_radius": "radius of the circular path c traces around the chosen base constant",
+    "morph_speed": "angular speed in radians/sec of c's circular morph path"
+  },
+  "knights_tour": {
+    "completion_pause": "seconds to hold the finished board before exiting",
+    "n": "board size: n x n squares for the knight to visit",
+    "step_delay": "seconds paused between knight moves",
+    "target_size": "desired board width in terminal cells used to size the squares (clamped to fit)"
+  },
+  "langtons_ant": {
+    "duration": "seconds to run before exiting back to the harness",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "num_ants": "number of ants stepping round-robin on the shared grid (min 1)",
+    "rule": "turn rule string of L/R per cell state (e.g. LR, LLRR); random = generate one",
+    "steps_per_frame": "total ant steps simulated per frame, spread across the ants (min 1)"
+  },
+  "letter_frequency": {
+    "completion_pause": "seconds to hold the final chart after the words run out",
+    "duration": "seconds before exiting early (None = no time limit, run through all words)",
+    "num_words": "number of words to take from the file (<= 0 = use all)",
+    "text_file": "path to the word list, relative to the project root (one word per line)",
+    "word_delay": "seconds paused between processing each word"
+  },
+  "lorenz_attractor": {
+    "beta": "Lorenz beta parameter in the ODEs",
+    "duration": "seconds to run before exiting back to the harness",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "rho": "Lorenz rho parameter (Rayleigh number) in the ODEs",
+    "scale": "cells per attractor unit (x doubled for char aspect)",
+    "sigma": "Lorenz sigma parameter (Prandtl number) in the ODEs",
+    "sub_dt": "ODE timestep for each RK4 sub-step (smaller = more accurate)",
+    "sub_steps": "RK4 integration steps per frame (higher = faster trace, min 1)",
+    "trail_length": "max points kept in the fading trail (0 = head only)",
+    "view_rotation_speed": "radians/sec the view spins around the z axis for a 3D feel"
+  },
+  "lsystem": {
+    "completion_pause": "seconds to hold the finished curve before exiting",
+    "duration": "seconds to run before exiting (hard cap even if still drawing)",
+    "frame_delay": "seconds between frames (lower = faster drawing)",
+    "preset": "curve preset: fractal_tree, koch, koch_snowflake, sierpinski, dragon, plant, sierpinski_arrowhead, or random = pick one",
+    "segments_per_frame": "line segments appended to the canvas each frame (min 1)"
+  },
+  "mandelbrot": {
+    "base_iter": "starting escape-iteration count; grows by ~60 per decade of zoom",
+    "duration": "seconds to run before exiting the zoom loop",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "zoom_factor": "zoom multiplier applied each frame (higher = faster dive, resets past 1e13)"
+  },
+  "matrix_breach": {
+    "duration": "seconds to run the whole hack sequence before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "phase_time": "seconds spent in each phase (RECON/EXPLOIT/ACCESS/EXFIL); <=0 coerced to 1.0",
+    "rain_density": "0-1 spawn chance scale for background rain columns (clamped, x0.08 per column per frame)"
+  },
+  "matrix_rain": {
+    "density": "per-column chance each frame of spawning a new drop (0-1, higher = denser rain)",
+    "duration": "seconds the rain runs before exiting",
+    "loading_duration": "seconds for the fake loading bar shown first; 0 = skip it",
+    "speed": "frames/sec of the rain animation (frame delay = 1/speed)"
+  },
+  "maze_generator": {
+    "completion_pause": "seconds to hold the finished maze on screen before exiting",
+    "step_delay": "seconds paused after each carving step (lower = faster generation)"
+  },
+  "metaballs": {
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "num_blobs": "number of drifting metaballs in the field (min 1)",
+    "threshold": "field iso-value defining the blob surface (lower = fatter blobs; contour band drawn at +/-12%)"
+  },
+  "metaprogramming_imports": {
+    "completion_pause": "seconds to hold the finished chart on screen after all files are scanned",
+    "duration": "max seconds to run overall; None = no time limit, scan every file",
+    "file_delay": "seconds paused after scanning each python file (lower = faster chart updates)"
+  },
+  "n_body": {
+    "G": "gravitational constant used in the force law",
+    "duration": "seconds to run the simulation before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "num_planets": "number of planets orbiting the sun (min 1)",
+    "planet_mass_max": "upper bound of uniform random planet mass",
+    "planet_mass_min": "lower bound of uniform random planet mass",
+    "radius_jitter": "world units of random offset added to each planet's base orbital radius",
+    "softening": "distance-squared softening added to avoid singular close encounters",
+    "sub_steps": "physics integration sub-steps per frame for stability (min 1)",
+    "sun_mass": "mass of the central sun (sets orbital speeds)",
+    "tangent_jitter": "radians of random tilt from purely tangential launch direction",
+    "trail_length": "max trail points kept per body (0 = no trails)",
+    "velocity_jitter": "fractional random offset around circular orbit speed (0.3 = +/-30%; makes eccentric orbits)",
+    "view_scale": "screen chars per world unit (higher = zoomed in; x doubled for aspect)"
+  },
+  "n_queens": {
+    "completion_pause": "seconds to hold the solved board on screen before exiting",
+    "n": "board size and queen count (N x N board)",
+    "step_delay": "seconds paused after each placement/backtrack step (lower = faster solve)",
+    "target_size": "desired board width in characters; cells sized to fit this and the terminal"
+  },
+  "netmap": {
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster pulse animation)",
+    "refresh_interval": "seconds between arp rescans that diff joins/leaves",
+    "simulate": "true = always show fake LAN devices; false = use real arp/ip-neigh, faking only on failure"
+  },
+  "nmap_replay": {
+    "duration": "seconds to run before exiting (engagements restart until then)",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "num_hosts": "fake hosts discovered per engagement (min 1, capped at 254)",
+    "scan_speed": "multiplier on the ~12 lines/sec output pace (min 0.1; higher = faster scroll)"
+  },
+  "packet_sniffer": {
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "max_pps": "synthesized packet lines emitted per second (capped at 12 per frame)",
+    "poll_interval": "seconds between lsof/netstat polls for real connection churn",
+    "simulate": "true = skip real lsof/netstat and fabricate all connections"
+  },
+  "pathfinding": {
+    "completion_pause": "seconds to hold the finished path on screen before exiting",
+    "step_delay": "seconds paused after each A* expansion and each path cell drawn (lower = faster)"
+  },
+  "pendulum_wave": {
+    "T_beat": "seconds until all pendulums realign (pendulum i does period_offset+i cycles in this time)",
+    "amplitude_deg": "swing amplitude in degrees from vertical",
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "num_pendulums": "number of pendulums across the screen (min 2)",
+    "period_offset": "cycles the slowest pendulum completes per T_beat (min 1; higher = faster, closer periods)"
+  },
+  "percolation": {
+    "completion_pause": "seconds the spanning-cluster flash holds before resetting with a fresh grid",
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "p_end": "occupation probability the sweep ramps up to (capped there)",
+    "p_start": "occupation probability at the start of each sweep",
+    "sweep_time": "seconds to ramp p from p_start to p_end"
+  },
+  "plasma": {
+    "duration": "seconds of plasma to play at 20 fps; None = ~500 frames (~25s)",
+    "loading_duration": "seconds for the fake loading bar shown first"
+  },
+  "port_scanner": {
+    "completion_pause": "seconds to hold each sweep's summary on screen before the next sweep",
+    "connect_timeout": "seconds per TCP connect attempt before a port counts as filtered",
+    "duration": "seconds to run before exiting (sweeps rotate target/gateway until then)",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "target": "host to scan; only localhost/private IPs allowed, anything else falls back to 127.0.0.1",
+    "workers": "thread pool size and probes launched per frame (min 1)"
+  },
+  "predator_prey": {
+    "alpha": "prey growth rate in the Lotka-Volterra equations",
+    "beta": "predation rate: prey lost per prey-predator encounter",
+    "delta": "predator growth per prey eaten",
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "gamma": "predator death rate",
+    "history_size": "points kept in the plots (min 2); older points scroll off",
+    "sim_speed": "simulation time multiplier per wall-clock second (higher = faster cycles)",
+    "x0": "initial prey population",
+    "y0": "initial predator population"
+  },
+  "prime_sieve": {
+    "completion_pause": "seconds to hold the finished sieve before exiting",
+    "n": "sieve upper bound: marks numbers 2..n as prime or composite",
+    "step_delay": "seconds paused after each composite is marked (lower = faster)"
+  },
+  "progress_bars": {
+    "completion_pause": "seconds to hold the completed screen before exiting",
+    "duration": "seconds until the overall bar hits 100% and the run ends",
+    "num_bars": "number of fake process bars shown (each finishes at 15-95% of duration)"
+  },
+  "rainbow_code": {
+    "cycle_length": "characters per full rainbow cycle (smaller = faster color change)",
+    "duration": "seconds to run; typing speed is set so the whole file fits this window"
+  },
+  "raymarch_sdf": {
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "hold_time": "seconds each shape is held before the next morph starts (min 0)",
+    "march_steps": "max raymarch iterations per ray (min 8; more = crisper edges, slower)",
+    "morph_time": "seconds to blend from one shape to the next (min 0.1)"
+  },
+  "rss_feed_reader": {
+    "completion_pause": "seconds to hold the final chart (or the error screen) before exiting",
+    "duration": "max seconds to run including the final hold; None = process all entries",
+    "entry_delay": "seconds paused after each entry is added to the word counts",
+    "feeds": "list of RSS feed URLs to fetch; None = NYT/BBC/CNN defaults"
+  },
+  "sandpile": {
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "grains_per_frame": "sand grains dropped per frame, split across drop sites (min 1)",
+    "topple_iters_per_frame": "max toppling passes per frame; big avalanches span extra frames (min 1)"
+  },
+  "shaded_mesh": {
+    "ambient": "base light level 0-1 added before diffuse shading (higher = fewer dark faces)",
+    "angular_speed": "rotation rate in radians/sec about a random axis",
+    "distance": "camera-to-mesh distance along z (larger = smaller on screen)",
+    "duration": "seconds to run before exiting",
+    "focal_factor": "focal length as a fraction of terminal height (larger = more zoomed in)",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "light_offset": "[x, y, z] position of the point light; None = [3.0, 2.0, 0.0]",
+    "mesh_file": ".obj file or directory (relative to repo root); a directory picks a random .obj, failures fall back to a cube",
+    "mesh_scale": "size multiplier applied after the mesh is normalized to a unit sphere"
+  },
+  "sir_epidemic": {
+    "beta": "infection probability per infected neighbor per step",
+    "duration": "seconds to run before exiting (ends early if infections die out)",
+    "frame_delay": "seconds between simulation steps/frames (lower = faster)",
+    "gamma": "recovery probability per infected cell per step",
+    "grid_fraction": "fraction of screen height for the agent grid vs the curves (clamped 0.3-0.85)",
+    "history_size": "time steps kept in the S/I/R curves (min 2); older points scroll off",
+    "initial_infected": "cells infected at the start (min 1)"
+  },
+  "slime_mold": {
+    "decay": "trail retained after each blur pass, 0-1 (lower = faster evaporation)",
+    "deposit": "trail intensity each agent lays down per step",
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "num_agents": "number of Physarum agents (min 50; scaled down on small terminals)",
+    "sensor_angle": "radians the left/right sensors are offset from each agent's heading",
+    "sensor_dist": "cells ahead the sensors sample the trail",
+    "turn_speed": "radians turned per step toward the strongest sensor"
+  },
+  "snake_ai": {
+    "duration": "seconds to run before exiting (games restart automatically)",
+    "frame_delay": "seconds per tick when the snake is short (min 0.005)",
+    "min_delay": "seconds per tick the game speeds up to as the snake grows (min 0.005, capped at frame_delay)"
+  },
+  "solar_orrery": {
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "show_labels": "draw each planet's name next to it",
+    "show_outer": "include Jupiter-Neptune; False = inner four planets only",
+    "time_jitter": "radial wobble amplitude as a fraction of orbit radius (0 = perfect circles)",
+    "time_scale": "simulated years per wall-clock second"
+  },
+  "sorting_visualizer": {
+    "algorithm": "one of 'bubble', 'insertion', 'selection', 'quick'; 'random' picks one",
+    "completion_pause": "seconds to hold the fully sorted array before exiting",
+    "n": "number of bars (values 1..n, shuffled)",
+    "step_delay": "seconds paused after each compare/swap (lower = faster sort)"
+  },
+  "space_filling": {
+    "curve": "'hilbert', 'dragon', or 'both' (invalid values fall back to 'both')",
+    "duration": "seconds to run before exiting; stages cycle until then",
+    "frame_delay": "seconds between frames (lower = faster drawing)",
+    "pause_time": "seconds to hold a finished curve before deepening to the next stage (min 0)",
+    "segments_per_frame": "curve segments revealed per frame (min 1; higher = faster tracing)"
+  },
+  "spirograph": {
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "hold_time": "seconds to hold a completed curve before starting a new one",
+    "speed": "pen parameter advance in radians per second (higher = faster tracing)",
+    "trail_len": "max points kept in the fading trail (min 10)"
+  },
+  "starfield": {
+    "duration": "seconds to run before exiting",
+    "frame_delay": "seconds between frames (lower = faster flight)",
+    "num_stars": "number of stars flying toward the viewer",
+    "speed": "depth units each star moves toward the camera per frame"
+  },
+  "stock_crypto_ticker": {
+    "duration": "seconds to run before the harness picks the next module",
+    "frame_delay": "seconds between frames; prices tick every 0.5s regardless",
+    "refresh_interval": "seconds between live API fetches (min 5; only used when simulate=false)",
+    "simulate": "true = random-walk prices offline; false = fetch live CoinGecko/Yahoo prices",
+    "symbols": "comma-separated symbols to keep from the default universe; None = all 13"
+  },
+  "strange_attractors": {
+    "batch": "number of points iterated and splatted per frame (min 10; more = denser image)",
+    "drift": "amplitude of the sinusoidal wobble added to attractor parameters (0 = static shape)",
+    "duration": "seconds to run before the harness picks the next module",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "iters_per_frame": "attractor map iterations applied to every point each frame (min 1)",
+    "switch_time": "seconds spent on each attractor before cycling to the next (min 1)"
+  },
+  "sudoku": {
+    "completion_pause": "seconds to hold the solved board before exiting",
+    "duration": "seconds over which the recorded solve trace is replayed",
+    "log_lines": "rows of recent place/undo events shown in the activity panel (min 1)",
+    "target_size": "target board width in characters; cell size derived from it, clamped to screen"
+  },
+  "terrain_flyover": {
+    "camera_height": "baseline camera altitude the bobbing motion centers on (kept 5 above terrain)",
+    "duration": "seconds to run before the harness picks the next module",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "height_scale": "vertical exaggeration multiplier applied to the 0..1 heightmap",
+    "speed": "forward flight speed in heightmap units per second",
+    "view_distance": "number of depth slices rendered toward the horizon (min 8; more = farther view, slower)"
+  },
+  "tower_of_hanoi": {
+    "completion_pause": "seconds to hold the finished towers before exiting",
+    "history_lines": "rows of recent moves shown in the history list (min 1)",
+    "num_disks": "number of disks on the starting peg (total moves = 2^n - 1)",
+    "step_delay": "seconds paused after each disk move"
+  },
+  "tunnel": {
+    "depth_scale": "band depth divisor; larger = wider, more stretched rings",
+    "duration": "seconds to run before the harness picks the next module",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "speed": "how fast the tunnel bands rush toward the viewer (depth units per second)"
+  },
+  "turing_machine": {
+    "completion_pause": "seconds the HALTED/MAX STEPS banner flashes before the next machine",
+    "duration": "seconds to run, cycling through the busy-beaver machines",
+    "step_delay": "starting seconds per machine step; decays 5%/step toward a 0.01s floor"
+  },
+  "ulam_spiral": {
+    "completion_pause": "seconds to hold the finished spiral before exiting",
+    "duration": "seconds to run before the harness picks the next module",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "max_n": "largest integer walked in the spiral, sieved for primality (min 2)",
+    "numbers_per_frame": "integers plotted per frame (min 1; higher = faster spiral growth)"
+  },
+  "unredact": {
+    "completion_pause": "seconds to hold the fully revealed document before exiting",
+    "duration": "seconds over which all redacted words are progressively revealed",
+    "num_paragraphs": "contiguous paragraphs sampled from the text (min 3 enforced)",
+    "redact_probability": "chance (0..1) each word starts as a redacted #### block",
+    "text_file": "path to source text (relative to repo root); split on blank lines into paragraphs"
+  },
+  "wave": {
+    "duration": "seconds to run before the harness picks the next module",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "mode": "which pattern to draw: sine, lissajous, standing, beats, packet, rose, spirograph, damped, ekg; 'random' picks one",
+    "num_waves": "number of overlaid sine curves (min 1; only used by the 'sine' mode)"
+  },
+  "wave_on_string": {
+    "amplitude": "displacement value mapped to the full screen half-height; larger values clamp",
+    "c2": "wave speed coefficient c^2 in the discrete wave equation (keep <= 1 for stability)",
+    "damping": "per-step energy loss fraction (0 = undamped, waves never decay)",
+    "duration": "seconds to run before the harness picks the next module",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "pulse_interval": "seconds between random gaussian pulses injected into the string",
+    "pulse_strength": "peak displacement of each injected gaussian pulse",
+    "steps_per_frame": "physics steps computed per drawn frame (min 1; higher = faster wave motion)"
+  },
+  "wifi_scan": {
+    "duration": "seconds to run before the harness picks the next module",
+    "frame_delay": "seconds between frames; each frame jitters signal bars slightly",
+    "refresh_interval": "seconds between re-scans of the network list (nmcli/system_profiler or new fake set)",
+    "simulate": "true = always show fake networks; false = try nmcli (Linux) / current net (macOS) first"
+  },
+  "window_spawner": {
+    "child_duration": "seconds each module runs inside a child window",
+    "duration": "seconds budget; only bounds the no-backend error screen (min(4, duration))",
+    "frame_delay": "seconds between status-panel redraws",
+    "max_wait": "seconds to wait for children before giving up; 0 = auto from runs and child_duration",
+    "num_windows": "terminal windows/panes to spawn, each running its own module set (min 1)",
+    "pool": "comma-separated module names children may run; None = built-in default pool",
+    "runs_per_window": "scheduler iterations each child window runs before exiting (min 1)",
+    "subset_size": "modules randomly picked from the pool for each window (min 1)"
+  },
+  "wireworld": {
+    "duration": "seconds to run, cycling circuits every 10s",
+    "frame_delay": "seconds between frames (lower = faster electrons)",
+    "generations_per_frame": "Wireworld generations computed per drawn frame (min 1)"
+  },
+  "wolfram_rule": {
+    "duration": "seconds to run before the harness picks the next module",
+    "frame_delay": "seconds between generations (one new row per frame)",
+    "rule": "Wolfram rule number 0-255; 'random' picks from a curated interesting set",
+    "seed_mode": "initial row: 'single' = one center cell, 'random' = random bits (else single)"
+  },
+  "worldmap_attack": {
+    "duration": "seconds to run before the harness picks the next module",
+    "frame_delay": "seconds between frames (lower = faster animation)",
+    "max_active": "cap on simultaneously drawn attack arcs (min 1)",
+    "spawn_rate": "new attack arcs launched per second (accumulated fractionally)"
+  }
+}

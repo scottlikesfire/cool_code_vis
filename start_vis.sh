@@ -1,11 +1,11 @@
 #!/bin/bash
 # Launch the visualizer fullscreen in a tmux session (reattaches if one is
 # already running). The config comes from data/active_config — written by the
-# config web UI's "apply" button — falling back to test1.json.
+# config web UI's "apply" button — falling back to default.json.
 cd "$(dirname "$(readlink -f "$0")")"
 export LANG=C.UTF-8
 
-CFG=test1.json
+CFG=default.json
 if [ -f data/active_config ]; then
     CANDIDATE=$(head -1 data/active_config | tr -d '[:space:]')
     [ -f "data/configs/$CANDIDATE" ] && CFG=$CANDIDATE

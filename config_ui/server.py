@@ -32,6 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = ROOT / "data" / "configs"
 ACTIVE_FILE = ROOT / "data" / "active_config"
 INDEX_FILE = Path(__file__).resolve().parent / "index.html"
+DOCS_FILE = Path(__file__).resolve().parent / "param_docs.json"
 
 CONFIG_NAME_RE = re.compile(r"^[A-Za-z0-9._-]+\.json$")
 MODULE_NAME_RE = re.compile(r"^[a-z0-9_]+$")
@@ -79,7 +80,7 @@ def active_config():
             return name
     except OSError:
         pass
-    return "test1.json"
+    return "default.json"
 
 
 def apply_config(name):
@@ -136,6 +137,9 @@ class Handler(BaseHTTPRequestHandler):
             if not name or not path.exists():
                 return self._error(404, "no such config")
             self._send(200, path.read_bytes())
+        elif url.path == "/api/docs":
+            body = DOCS_FILE.read_bytes() if DOCS_FILE.exists() else b"{}"
+            self._send(200, body)
         elif url.path == "/api/params":
             name = parse_qs(url.query).get("module", [""])[0]
             try:

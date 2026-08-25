@@ -48,7 +48,7 @@ After that, you're ready to run.
 
 ```bash
 # Run the everything-enabled config (all 80 modules)
-python main.py test1.json
+python main.py default.json
 
 # Or one of the curated subsets
 python main.py visual.json       # pure visual effects
@@ -124,7 +124,7 @@ offsets** so they overlap but each stays visible — making it obvious that
 several independent things are running at once. Backends, tried in order: tmux panes (when running inside tmux —
 works on a bare TTY or over ssh), macOS Terminal.app, then a Linux GUI
 terminal (gnome-terminal / konsole / xfce4-terminal / xterm). With no backend
-available it politely skips its turn. In `test1.json` it's given a low
+available it politely skips its turn. In `default.json` it's given a low
 `weight` so it comes up only occasionally.
 
 ---
@@ -602,7 +602,7 @@ I have not include most of the data I am using here, this is because I do not kn
 
 | Config | Contents |
 |---|---|
-| `test1.json` | Master config — all 80 modules enabled |
+| `default.json` | Master config — all 80 modules enabled |
 | `new.json` | The 20 newest modules (cellular automata, fractals, 3D) |
 | `orph.json` | Network / security-themed modules |
 | `visual.json` | Pure visual effects only |
