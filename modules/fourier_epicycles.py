@@ -206,8 +206,11 @@ def run(stdscr, duration, frame_delay, num_terms, total_amplitude,
                 # right.
                 offset = (n - 1 - i)
                 sx = wave_x0 + offset
+                # oldest samples sit furthest right; skip the off-screen ones
+                # and keep going — breaking here would drop the whole trace
+                # once the history buffer outgrows the plot width
                 if sx >= max_x - 1:
-                    break
+                    continue
                 yi = int(round(py))
                 _put(stdscr, yi, sx, "*", wave_attr, max_y, max_x)
 
